@@ -432,6 +432,15 @@ footer {
   line-height: 1.25;
 }
 
+.calendar-table .holiday {
+  display: block;
+  margin-top: 5px;
+  color: #b3261e;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
 .calendar-table td.weekend .solar {
   color: #c62828;
 }
@@ -805,6 +814,75 @@ footer {
 
   const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
   const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+  // Ngày lễ Việt Nam.
+  const FIXED_HOLIDAYS = {
+    "1-1": "Tết Dương lịch (Tết tây)",
+    "9-1": "Ngày truyền thống học sinh, sinh viên Việt Nam",
+    "3-2": "Ngày thành lập Đảng Cộng Sản Việt Nam",
+    "14-2": "Lễ tình nhân (Valentine)",
+    "27-2": "Ngày thầy thuốc Việt Nam",
+    "8-3": "Ngày Quốc tế Phụ nữ",
+    "20-3": "Ngày Quốc tế Hạnh phúc",
+    "26-3": "Ngày thành lập Đoàn TNCS Hồ Chí Minh",
+    "1-4": "Ngày Cá tháng Tư",
+    "30-4": "Ngày giải phóng miền Nam",
+    "1-5": "Ngày Quốc tế Lao động",
+    "7-5": "Ngày chiến thắng Điện Biên Phủ",
+    "13-5": "Ngày của mẹ",
+    "19-5": "Ngày sinh Chủ tịch Hồ Chí Minh",
+    "1-6": "Ngày Quốc tế thiếu nhi",
+    "17-6": "Ngày của cha",
+    "21-6": "Ngày báo chí Việt Nam",
+    "28-6": "Ngày gia đình Việt Nam",
+    "11-7": "Ngày dân số thế giới",
+    "27-7": "Ngày Thương binh liệt sĩ",
+    "28-7": "Ngày thành lập công đoàn Việt Nam",
+    "19-8": "Ngày kỷ niệm Cách mạng Tháng 8 thành công",
+    "2-9": "Ngày Quốc Khánh",
+    "10-9": "Ngày thành lập Mặt trận Tổ quốc Việt Nam",
+    "1-10": "Ngày quốc tế người cao tuổi",
+    "10-10": "Ngày giải phóng thủ đô",
+    "13-10": "Ngày doanh nhân Việt Nam",
+    "20-10": "Ngày Phụ nữ Việt Nam",
+    "31-10": "Ngày Halloween",
+    "9-11": "Ngày pháp luật Việt Nam",
+    "19-11": "Ngày Quốc tế Nam giới",
+    "20-11": "Ngày Nhà giáo Việt Nam",
+    "23-11": "Ngày thành lập Hội chữ thập đỏ Việt Nam",
+    "1-12": "Ngày thế giới phòng chống AIDS",
+    "19-12": "Ngày toàn quốc kháng chiến",
+    "22-12": "Ngày thành lập quân đội nhân dân Việt Nam",
+    "24-12": "Ngày lễ Giáng sinh"
+  };
+
+  const LUNAR_HOLIDAYS = {
+    "1-1": "Tết Nguyên đán",
+    "2-1": "Tết Nguyên đán",
+    "3-1": "Tết Nguyên đán",
+    "15-1": "Tết Nguyên Tiêu",
+    "10-3": "Giỗ tổ Hùng Vương",
+    "15-4": "Lễ Phật Đản",
+    "5-5": "Tết Đoan ngọ",
+    "7-7": "Lễ Thất tịch",
+    "15-7": "Lễ Vu Lan",
+    "15-8": "Tết Trung thu",
+    "9-9": "Tết Trùng cửu",
+    "10-10": "Tết Trùng thập",
+    "15-10": "Tết Hạ Nguyên",
+    "23-12": "Ông Táo về trời"
+  };
+
+  function getHoliday(d, m, lunar) {
+    const holidays = [];
+    const fixed = FIXED_HOLIDAYS[`${d}-${m}`];
+    const lunarHoliday = LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`];
+
+    if (fixed) holidays.push(fixed);
+    if (lunarHoliday) holidays.push(lunarHoliday);
+
+    return holidays.join(" • ");
+  }
+
 
   function canChiYear(year) {
     return `${CAN[(year + 6) % 10]} ${CHI[(year + 8) % 12]}`;
@@ -866,6 +944,7 @@ footer {
 
     for (let d = 1; d <= total; d++) {
       const lunar = convertSolar2Lunar(d, m, y);
+      const holiday = getHoliday(d, m, lunar);
 
       if (!firstLunar) firstLunar = lunar;
 
@@ -895,11 +974,13 @@ footer {
       td.innerHTML = `
         <span class="solar">${d}</span>
         <span class="lunar">${formatLunar(lunar)}</span>
+        ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
       `;
 
       td.title =
         `${d}/${m}/${y} → ${lunar[0]}/${lunar[1]}/${lunar[2]}` +
-        (lunar[3] ? " (tháng nhuận)" : "");
+        (lunar[3] ? " (tháng nhuận)" : "") +
+        (holiday ? ` • ${holiday}` : "");
 
       td.addEventListener("click", function () {
         selectedDateKey = `${y}-${m}-${d}`;
@@ -942,8 +1023,10 @@ footer {
   function showSelectedDate(d, m, y, lunar) {
     selectedDateKey = `${y}-${m}-${d}`;
     $("todayTitle").textContent = `${pad(d)}-${pad(m)}-${y}`;
+    const holiday = getHoliday(d, m, lunar);
     $("todaySummary").textContent =
-      `[Mùng ${formatLunar(lunar)} ÂL] Ngày ${canChiDay(d, m, y)} • Tháng ${canChiMonth(lunar[1], lunar[2])} • Năm ${canChiYear(lunar[2])}`;
+      `[Mùng ${formatLunar(lunar)} ÂL] Ngày ${canChiDay(d, m, y)} • Tháng ${canChiMonth(lunar[1], lunar[2])} • Năm ${canChiYear(lunar[2])}` +
+      (holiday ? ` • 🎉 ${holiday}` : "");
   }
 
   function searchDateClick() {
