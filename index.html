@@ -122,7 +122,7 @@ button, input { font: inherit; }
 }
 
 .calendar-card, .converter-card, .info-card {
-  background: var(--red);
+  background: #fffaf0;
   border: 1px solid var(--line);
   border-radius: 18px;
   box-shadow: var(--shadow);
@@ -136,26 +136,55 @@ button, input { font: inherit; }
 
 .calendar-toolbar {
   display: grid;
-  grid-template-columns: 48px 1fr 48px;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 16px 18px;
   background: linear-gradient(135deg, #a91414 0%, #c62828 60%, #9d1c1c 100%);
   color: #fff8df;
 }
 
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-group:last-child {
+  justify-content: flex-end;
+}
+
 .nav-btn {
   width: 42px;
   height: 42px;
-  border: 1px solid rgba(255,255,255,.25);
-  background: rgba(255,255,255,.08);
-  color: white;
+  border: 2px solid #f6d365;
+  background: #fff8e7;
+  color: #8b1e1e;
   border-radius: 10px;
   cursor: pointer;
   font-size: 30px;
+  font-weight: 900;
   line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  transition: .2s;
 }
 
-.nav-btn:hover { background: rgba(255,255,255,.18); }
+.nav-btn:hover {
+  background: #f6d365;
+  color: #7a321f;
+  transform: translateY(-1px);
+}
+
+.nav-btn.month-nav-btn {
+  background: #66a96a !important;
+  border-color: #a9d3ac !important;
+  color: #ffffff !important;
+}
+
+.nav-btn.month-nav-btn:hover {
+  background: #4f8f54 !important;
+  border-color: #c0e0c2 !important;
+  color: #ffffff !important;
+}
 
 .month-title { text-align: center; }
 .month-title strong { display: block; font-size: 21px; }
@@ -235,8 +264,9 @@ button, input { font: inherit; }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: 100px 100px 120px auto;
+  gap: 10px;
+  align-items: end;
   margin-bottom: 15px;
 }
 
@@ -292,23 +322,37 @@ footer {
   .hero h2 { font-size: 23px; }
   .today-btn { padding: 9px 12px; }
 
-  .calendar-table td.solar { font-size: 15px; }
-  .lunar { margin-top: 4px; font-size: 10px; }
+  .calendar-table .solar { font-size: 15px; }
+  .calendar-table .lunar { margin-top: 4px; font-size: 10px; }
 
-  .form-grid { grid-template-columns: 1fr; }
+  .form-grid {
+    grid-template-columns: 90px 90px 105px auto;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
 }
 
 @media (max-width: 430px) {
+  .form-grid {
+    grid-template-columns: 80px 80px 100px auto;
+  }
+
   .brand h1 { font-size: 18px; }
-  .calendar-toolbar { grid-template-columns: 40px 1fr 40px; padding: 12px 10px; }
-  .nav-btn { width: 36px; height: 36px; font-size: 25px; }
+  .calendar-toolbar { grid-template-columns: 1fr auto 1fr; padding: 12px 10px; }
+  .nav-group { gap: 4px; }
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 23px;
+    padding: 0;
+  }
   .calendar-table th { padding: 9px 2px; }
   .calendar-table td.lunar { font-size: 9px; }
 }
 
 .date-search {
   display: grid;
-  grid-template-columns: 1fr 1fr 1.4fr auto;
+  grid-template-columns: 100px 100px 120px auto;
   gap: 10px;
   padding: 14px 16px 16px;
   background: #fff;
@@ -335,17 +379,35 @@ footer {
   box-shadow: 0 0 0 3px rgba(31,106,73,.10);
 }
 
-.date-search-btn {
+.date-search-actions {
   align-self: end;
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+
+.date-search-actions .today-inline-btn {
+  flex: 1 1 0;
+}
+
+.date-search-actions .date-search-btn {
+  flex: 2 1 0;
+}
+
+.date-search-btn,
+.today-btn {
   border: 0;
   border-radius: 11px;
-  padding: 10px 18px;
+  padding: 10px 12px;
   height: 42px;
   color: white;
-  background: var(--red);
   cursor: pointer;
   font-weight: 700;
   transition: .2s;
+}
+
+.date-search-btn {
+  background: var(--red);
 }
 
 .date-search-btn:hover {
@@ -353,12 +415,24 @@ footer {
   transform: translateY(-1px);
 }
 
+.today-btn {
+  background: #2e7d32;
+  border: 2px solid #a5d6a7;
+  text-transform: uppercase;
+}
+
+.today-btn:hover {
+  background: #1b5e20;
+  border-color: #c8e6c9;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 700px) {
   .date-search {
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 90px 90px 105px;
   }
 
-  .date-search-btn {
+  .date-search-actions {
     grid-column: 1 / -1;
   }
 }
@@ -380,9 +454,9 @@ footer {
 .calendar-table thead th {
   height: 46px;
   padding: 8px 4px;
-  background: #fff7e8;
-  border: 1px solid var(--line);
-  color: #7a321f;
+  background: #b7d9ba;
+  border: 1px solid #91bd95;
+  color: #245c29;
   text-align: center;
   font-size: 12px;
   font-weight: 800;
@@ -415,6 +489,30 @@ footer {
 
 .calendar-table tbody td.day.empty:hover {
   background: #fff0d5;
+}
+
+.calendar-table tbody td.day.adjacent-day {
+  cursor: default;
+  background: rgba(255, 244, 223, .45);
+  color: rgba(118, 93, 80, .42);
+  opacity: .72;
+}
+
+.calendar-table tbody td.day.adjacent-day:hover {
+  background: rgba(255, 244, 223, .55);
+}
+
+.calendar-table .adjacent-day .solar {
+  color: rgba(118, 93, 80, .42);
+  font-weight: 700;
+}
+
+.calendar-table .adjacent-day .lunar {
+  color: rgba(118, 93, 80, .30);
+}
+
+.calendar-table .adjacent-day .holiday {
+  color: rgba(179, 38, 30, .30);
 }
 
 .calendar-table .solar {
@@ -509,6 +607,14 @@ footer {
   }
 }
 
+
+.result + .result { margin-top: 12px; }
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(198, 40, 40, .20);
+  outline-offset: 2px;
+}
 </style>
 </head>
 <body>
@@ -527,30 +633,38 @@ footer {
         <h2 id="todayTitle">Hôm nay</h2>
         <p id="todaySummary">Đang tải...</p>
       </div>
-      <button class="today-btn" id="todayBtn">Hôm nay</button>
     </section>
 
     <section class="calendar-card">
       <div class="calendar-toolbar">
-        <button class="nav-btn" id="prevMonth" aria-label="Tháng trước">‹</button>
+        <div class="nav-group">
+          <button class="nav-btn year-nav-btn" id="prevYear" aria-label="Năm trước" title="Năm trước">«</button>
+          <button class="nav-btn month-nav-btn" id="prevMonth" aria-label="Tháng trước" title="Tháng trước">‹</button>
+        </div>
         <div class="month-title">
-          <strong id="monthYear">Tháng 8 / 2026</strong>
+          <strong id="monthYear">Đang tải lịch...</strong>
           <span id="monthLunarInfo">Lịch âm</span>
         </div>
-        <button class="nav-btn" id="nextMonth" aria-label="Tháng sau">›</button>
+        <div class="nav-group">
+          <button class="nav-btn month-nav-btn" id="nextMonth" aria-label="Tháng sau" title="Tháng sau">›</button>
+          <button class="nav-btn year-nav-btn" id="nextYear" aria-label="Năm sau" title="Năm sau">»</button>
+        </div>
       </div>
 
       <div class="date-search">
         <label>
-          <input id="searchDay" type="number" min="1" max="31" placeholder="Ngày">
+          <input id="searchDay" type="number" inputmode="numeric" min="1" max="31" placeholder="Ngày">
         </label>
         <label>
-          <input id="searchMonth" type="number" min="1" max="12" placeholder="Tháng">
+          <input id="searchMonth" type="number" inputmode="numeric" min="1" max="12" placeholder="Tháng">
         </label>
         <label>
-          <input id="searchYear" type="number" min="1200" max="2199" placeholder="Năm">
+          <input id="searchYear" type="number" inputmode="numeric" min="1200" max="2199" placeholder="Năm">
         </label>
-        <button class="date-search-btn" id="searchDateBtn">Tìm ngày</button>
+        <div class="date-search-actions">
+          <button class="date-search-btn today-inline-btn" id="searchDateBtn">Tìm ngày</button>
+          <button class="today-btn today-inline-btn" id="todayBtn">HÔM NAY</button>
+        </div>
       </div>
 
       <div class="calendar-wrap">
@@ -592,35 +706,36 @@ footer {
       <div class="tab-panel active" id="solarToLunar">
         <div class="form-grid">
           <label>Ngày
-            <input id="solarDay" type="number" min="1" max="31">
+            <input id="solarDay" type="number" inputmode="numeric" min="1" max="31">
           </label>
           <label>Tháng
-            <input id="solarMonth" type="number" min="1" max="12">
+            <input id="solarMonth" type="number" inputmode="numeric" min="1" max="12">
           </label>
           <label>Năm
-            <input id="solarYear" type="number" min="1200" max="2199">
+            <input id="solarYear" type="number" inputmode="numeric" min="1200" max="2199">
           </label>
+          <button class="primary-btn" id="convertSolarBtn">Đổi sang Âm lịch</button>
         </div>
-        <button class="primary-btn" id="convertSolarBtn">Đổi sang Âm lịch</button>
+        <div class="result" id="solarResult">Nhập ngày dương rồi bấm chuyển đổi.</div>
       </div>
 
       <div class="tab-panel" id="lunarToSolar">
         <div class="form-grid">
           <label>Ngày âm
-            <input id="lunarDay" type="number" min="1" max="30">
+            <input id="lunarDay" type="number" inputmode="numeric" min="1" max="30">
           </label>
           <label>Tháng âm
-            <input id="lunarMonth" type="number" min="1" max="12">
+            <input id="lunarMonth" type="number" inputmode="numeric" min="1" max="12">
           </label>
           <label>Năm âm
-            <input id="lunarYear" type="number" min="1200" max="2199">
+            <input id="lunarYear" type="number" inputmode="numeric" min="1200" max="2199">
           </label>
+          <button class="primary-btn" id="convertLunarBtn">Đổi sang Dương lịch</button>
         </div>
         <label class="check-row">
           <input id="lunarLeap" type="checkbox">
           <span>Tháng nhuận</span>
         </label>
-        <button class="primary-btn" id="convertLunarBtn">Đổi sang Dương lịch</button>
         <div class="result" id="lunarResult">Nhập ngày âm rồi bấm chuyển đổi.</div>
       </div>
     </section>
@@ -628,7 +743,7 @@ footer {
   </main>
 
   <footer>
-    <p>© 2026 Thánh Thơ • amlich of HoNgocDuc</p>
+    <p>© <span id="footerYear">2026</span> Thánh Thơ • amlich of HoNgocDuc</p>
   </footer>
 
   <script>
@@ -687,9 +802,13 @@ footer {
     const M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
     const Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
     const F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+
+    // Công thức Hồ Ngọc Đức: -0.4068*sin(M') + 0.0161*sin(2M').
+    // Hai hạng tử phải có dấu khác nhau.
     let C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) +
       0.0021 * Math.sin(2 * dr * M);
-    C1 -= 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(2 * Mpr * dr);
+    C1 -= 0.4068 * Math.sin(Mpr * dr);
+    C1 += 0.0161 * Math.sin(2 * Mpr * dr);
     C1 -= 0.0004 * Math.sin(3 * Mpr * dr);
     C1 += 0.0104 * Math.sin(2 * F * dr) - 0.0051 * Math.sin((M + Mpr) * dr);
     C1 -= 0.0074 * Math.sin((M - Mpr) * dr) + 0.0004 * Math.sin((2 * F + M) * dr);
@@ -828,10 +947,8 @@ footer {
     "30-4": "Ngày giải phóng miền Nam",
     "1-5": "Ngày Quốc tế Lao động",
     "7-5": "Ngày chiến thắng Điện Biên Phủ",
-    "13-5": "Ngày của mẹ",
     "19-5": "Ngày sinh Chủ tịch Hồ Chí Minh",
     "1-6": "Ngày Quốc tế thiếu nhi",
-    "17-6": "Ngày của cha",
     "21-6": "Ngày báo chí Việt Nam",
     "28-6": "Ngày gia đình Việt Nam",
     "11-7": "Ngày dân số thế giới",
@@ -872,30 +989,66 @@ footer {
     "23-12": "Ông Táo về trời"
   };
 
-  function getHoliday(d, m, lunar) {
+  function getNthWeekdayOfMonth(year, month, weekday, nth) {
+    // weekday: 0 = Chủ nhật ... 6 = Thứ bảy
+    const first = new Date(year, month - 1, 1);
+    const offset = (weekday - first.getDay() + 7) % 7;
+    return 1 + offset + (nth - 1) * 7;
+  }
+
+  function getDynamicHoliday(d, m, y) {
+    const holidays = [];
+
+    // Chủ nhật thứ 2 của tháng 5: Ngày của Mẹ.
+    if (m === 5 && d === getNthWeekdayOfMonth(y, 5, 0, 2)) {
+      holidays.push("Ngày của mẹ");
+    }
+
+    // Chủ nhật thứ 3 của tháng 6: Ngày của Cha.
+    if (m === 6 && d === getNthWeekdayOfMonth(y, 6, 0, 3)) {
+      holidays.push("Ngày của cha");
+    }
+
+    return holidays;
+  }
+
+  function getHoliday(d, m, lunar, solarYear = new Date().getFullYear()) {
     const holidays = [];
     const fixed = FIXED_HOLIDAYS[`${d}-${m}`];
-    const lunarHoliday = LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`];
+    const lunarHoliday = lunar[3]
+      ? null
+      : LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`];
 
     if (fixed) holidays.push(fixed);
     if (lunarHoliday) holidays.push(lunarHoliday);
+    holidays.push(...getDynamicHoliday(d, m, solarYear));
 
     return holidays.join(" • ");
   }
 
 
+  function mod(n, m) {
+    return ((n % m) + m) % m;
+  }
+
   function canChiYear(year) {
-    return `${CAN[(year + 6) % 10]} ${CHI[(year + 8) % 12]}`;
+    return `${CAN[mod(year + 6, 10)]} ${CHI[mod(year + 8, 12)]}`;
   }
 
   function canChiDay(d, m, y) {
     const jd = jdFromDate(d, m, y);
-    return `${CAN[(jd + 9) % 10]} ${CHI[(jd + 1) % 12]}`;
+    return `${CAN[mod(jd + 9, 10)]} ${CHI[mod(jd + 1, 12)]}`;
   }
 
   function canChiMonth(lunarMonth, lunarYear) {
-    const can = CAN[(lunarYear * 12 + lunarMonth + 3) % 10];
-    return `${can} ${CHI[(lunarMonth + 1) % 12]}`;
+    // Can tháng Giêng được xác định theo Can của năm:
+    // Giáp/Kỷ -> Bính Dần; Ất/Canh -> Mậu Dần;
+    // Bính/Tân -> Canh Dần; Đinh/Nhâm -> Nhâm Dần;
+    // Mậu/Quý -> Giáp Dần.
+    const yearCan = (lunarYear + 6) % 10;
+    const firstMonthCan = (yearCan % 5) * 2 + 2;
+    const can = CAN[mod(firstMonthCan + lunarMonth - 1, 10)];
+    return `${can} ${CHI[mod(lunarMonth + 1, 12)]}`;
   }
 
   function formatLunar(lunar) {
@@ -903,7 +1056,7 @@ footer {
   }
 
   function dateFromParts(d, m, y) {
-    return new Date(y, m - 1, d);
+    return makeCalendarDate(y, m, d);
   }
 
   function validSolar(d, m, y) {
@@ -911,10 +1064,25 @@ footer {
     return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
   }
 
-  let current = new Date();
-  current = new Date(current.getFullYear(), current.getMonth(), 1);
-  const today = new Date();
-  const todayKey = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  // Ngày hiện tại luôn theo múi giờ Việt Nam (UTC+7).
+  // Không phụ thuộc múi giờ của máy người dùng.
+  function getVietnamToday() {
+    const now = new Date();
+    const vietnam = new Date(now.getTime() + TIME_ZONE * 60 * 60 * 1000);
+    return {
+      year: vietnam.getUTCFullYear(),
+      month: vietnam.getUTCMonth() + 1,
+      day: vietnam.getUTCDate()
+    };
+  }
+
+  function makeCalendarDate(year, month, day) {
+    return new Date(year, month - 1, day);
+  }
+
+  const vietnamToday = getVietnamToday();
+  let current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
+  const todayKey = `${vietnamToday.year}-${vietnamToday.month}-${vietnamToday.day}`;
   let selectedDateKey = null;
 
   function renderCalendar() {
@@ -923,7 +1091,7 @@ footer {
 
     $("monthYear").textContent = `Tháng ${m} Năm ${y}`;
 
-    const firstDay = new Date(y, m - 1, 1);
+    const firstDay = makeCalendarDate(y, m, 1);
     const mondayIndex = (firstDay.getDay() + 6) % 7;
     const total = daysInMonth(y, m);
     const tbody = $("calendarGrid");
@@ -934,21 +1102,35 @@ footer {
     let count = 0;
     let firstLunar = null;
 
-    // Ô trống trước ngày đầu tháng.
-    for (let i = 0; i < mondayIndex; i++) {
+    // Hiển thị những ngày cuối tháng trước ở các ô đầu tuần.
+    const prevMonthDate = new Date(y, m - 2, 1);
+    const prevYear = prevMonthDate.getFullYear();
+    const prevMonth = prevMonthDate.getMonth() + 1;
+    const prevTotal = daysInMonth(prevYear, prevMonth);
+
+    for (let i = mondayIndex - 1; i >= 0; i--) {
+      const d = prevTotal - i;
+      const lunar = convertSolar2Lunar(d, prevMonth, prevYear);
+      const holiday = getHoliday(d, prevMonth, lunar, prevYear);
       const td = document.createElement("td");
-      td.className = "day empty";
+      td.className = "day adjacent-day";
+      td.innerHTML = `
+        <span class="solar">${d}</span>
+        <span class="lunar">${formatLunar(lunar)}</span>
+        ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
+      `;
+      td.title = `${d}/${prevMonth}/${prevYear} (tháng trước)`;
       row.appendChild(td);
       count++;
     }
 
     for (let d = 1; d <= total; d++) {
       const lunar = convertSolar2Lunar(d, m, y);
-      const holiday = getHoliday(d, m, lunar);
+      const holiday = getHoliday(d, m, lunar, y);
 
       if (!firstLunar) firstLunar = lunar;
 
-      const date = new Date(y, m - 1, d);
+      const date = makeCalendarDate(y, m, d);
       const weekday = date.getDay();
       const key = `${y}-${m}-${d}`;
 
@@ -998,12 +1180,26 @@ footer {
       }
     }
 
-    // Điền đủ 7 cột cho hàng cuối.
+    // Hiển thị những ngày đầu tháng sau để đủ 7 cột.
     if (count > 0) {
+      const nextMonthDate = new Date(y, m, 1);
+      const nextYear = nextMonthDate.getFullYear();
+      const nextMonth = nextMonthDate.getMonth() + 1;
+      let nextDay = 1;
+
       while (count < 7) {
+        const lunar = convertSolar2Lunar(nextDay, nextMonth, nextYear);
+        const holiday = getHoliday(nextDay, nextMonth, lunar, nextYear);
         const td = document.createElement("td");
-        td.className = "day empty";
+        td.className = "day adjacent-day";
+        td.innerHTML = `
+          <span class="solar">${nextDay}</span>
+          <span class="lunar">${formatLunar(lunar)}</span>
+          ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
+        `;
+        td.title = `${nextDay}/${nextMonth}/${nextYear} (tháng sau)`;
         row.appendChild(td);
+        nextDay++;
         count++;
       }
 
@@ -1011,9 +1207,9 @@ footer {
     }
 
     const todayLunar = convertSolar2Lunar(
-      today.getDate(),
-      today.getMonth() + 1,
-      today.getFullYear()
+      vietnamToday.day,
+      vietnamToday.month,
+      vietnamToday.year
     );
 
     $("monthLunarInfo").textContent =
@@ -1023,7 +1219,7 @@ footer {
   function showSelectedDate(d, m, y, lunar) {
     selectedDateKey = `${y}-${m}-${d}`;
     $("todayTitle").textContent = `${pad(d)}-${pad(m)}-${y}`;
-    const holiday = getHoliday(d, m, lunar);
+    const holiday = getHoliday(d, m, lunar, y);
     $("todaySummary").textContent =
       `[Mùng ${formatLunar(lunar)} ÂL] Ngày ${canChiDay(d, m, y)} • Tháng ${canChiMonth(lunar[1], lunar[2])} • Năm ${canChiYear(lunar[2])}` +
       (holiday ? ` • 🎉 ${holiday}` : "");
@@ -1034,13 +1230,16 @@ footer {
     const m = Number($("searchMonth").value);
     const y = Number($("searchYear").value);
 
-    if (!validSolar(d, m, y)) {
-      alert("Ngày Dương lịch không hợp lệ.");
+    if (
+      !Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y) ||
+      !validSolar(d, m, y)
+    ) {
+      alert("Vui lòng nhập ngày, tháng, năm Dương lịch hợp lệ.");
       return;
     }
 
     selectedDateKey = `${y}-${m}-${d}`;
-    current = new Date(y, m - 1, 1);
+    current = makeCalendarDate(y, m, 1);
     const lunar = convertSolar2Lunar(d, m, y);
 
     renderCalendar();
@@ -1054,18 +1253,22 @@ footer {
 
   function resetToToday() {
     selectedDateKey = null;
-    current = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lunar = convertSolar2Lunar(today.getDate(), today.getMonth() + 1, today.getFullYear());
+    current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
+    const lunar = convertSolar2Lunar(vietnamToday.day, vietnamToday.month, vietnamToday.year);
     renderCalendar();
-    showSelectedDate(today.getDate(), today.getMonth() + 1, today.getFullYear(), lunar);
+    showSelectedDate(vietnamToday.day, vietnamToday.month, vietnamToday.year, lunar);
   }
 
   function setDefaultConverterValues() {
-    $("solarDay").value = today.getDate();
-    $("solarMonth").value = today.getMonth() + 1;
-    $("solarYear").value = today.getFullYear();
+    $("searchDay").value = vietnamToday.day;
+    $("searchMonth").value = vietnamToday.month;
+    $("searchYear").value = vietnamToday.year;
 
-    const lunar = convertSolar2Lunar(today.getDate(), today.getMonth() + 1, today.getFullYear());
+    $("solarDay").value = vietnamToday.day;
+    $("solarMonth").value = vietnamToday.month;
+    $("solarYear").value = vietnamToday.year;
+
+    const lunar = convertSolar2Lunar(vietnamToday.day, vietnamToday.month, vietnamToday.year);
     $("lunarDay").value = lunar[0];
     $("lunarMonth").value = lunar[1];
     $("lunarYear").value = lunar[2];
@@ -1077,7 +1280,10 @@ footer {
     const m = Number($("solarMonth").value);
     const y = Number($("solarYear").value);
 
-    if (!validSolar(d, m, y)) {
+    if (
+      !Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y) ||
+      !validSolar(d, m, y)
+    ) {
       $("solarResult").textContent = "Ngày Dương lịch không hợp lệ.";
       return;
     }
@@ -1096,31 +1302,59 @@ footer {
     const y = Number($("lunarYear").value);
     const leap = $("lunarLeap").checked ? 1 : 0;
 
-    if (d < 1 || d > 30 || m < 1 || m > 12 || y < 1200 || y > 2199) {
+    if (
+      !Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y) ||
+      d < 1 || d > 30 || m < 1 || m > 12 || y < 1200 || y > 2199
+    ) {
       $("lunarResult").textContent = "Ngày Âm lịch không hợp lệ.";
       return;
     }
 
     const solar = convertLunar2Solar(d, m, y, leap);
+
     if (solar[0] === 0) {
       $("lunarResult").textContent =
         "Ngày Âm lịch này không tồn tại hoặc lựa chọn tháng nhuận không đúng.";
       return;
     }
 
+    // Kiểm tra ngược để loại các ngày vượt quá số ngày thực tế
+    // của tháng âm (ví dụ ngày 30 ở tháng chỉ có 29 ngày).
+    const check = convertSolar2Lunar(solar[0], solar[1], solar[2]);
+    if (
+      check[0] !== d ||
+      check[1] !== m ||
+      check[2] !== y ||
+      !!check[3] !== !!leap
+    ) {
+      $("lunarResult").textContent =
+        "Ngày Âm lịch này không tồn tại hoặc lựa chọn tháng nhuận không đúng.";
+      return;
+    }
+
     $("lunarResult").innerHTML =
-      `<strong>${d}/${m}/${y}${leap ? " (nhuận)" : ""}</strong> Âm lịch = ` +
+      `<strong>${pad(d)}/${pad(m)}/${y}${leap ? " (nhuận)" : ""}</strong> Âm lịch = ` +
       `<strong>${pad(solar[0])}/${pad(solar[1])}/${solar[2]}</strong> Dương lịch.`;
   }
 
   document.addEventListener("DOMContentLoaded", () => {
+    $("prevYear").addEventListener("click", () => {
+      current = makeCalendarDate(current.getFullYear() - 1, current.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
     $("prevMonth").addEventListener("click", () => {
-      current = new Date(current.getFullYear(), current.getMonth() - 1, 1);
+      current = makeCalendarDate(current.getFullYear(), current.getMonth(), 1);
       renderCalendar();
     });
 
     $("nextMonth").addEventListener("click", () => {
-      current = new Date(current.getFullYear(), current.getMonth() + 1, 1);
+      current = makeCalendarDate(current.getFullYear(), current.getMonth() + 2, 1);
+      renderCalendar();
+    });
+
+    $("nextYear").addEventListener("click", () => {
+      current = makeCalendarDate(current.getFullYear() + 1, current.getMonth() + 1, 1);
       renderCalendar();
     });
 
@@ -1134,6 +1368,18 @@ footer {
     $("convertSolarBtn").addEventListener("click", convertSolarClick);
     $("convertLunarBtn").addEventListener("click", convertLunarClick);
 
+    ["solarDay", "solarMonth", "solarYear"].forEach(id => {
+      $(id).addEventListener("keydown", (event) => {
+        if (event.key === "Enter") convertSolarClick();
+      });
+    });
+
+    ["lunarDay", "lunarMonth", "lunarYear"].forEach(id => {
+      $(id).addEventListener("keydown", (event) => {
+        if (event.key === "Enter") convertLunarClick();
+      });
+    });
+
     document.querySelectorAll(".tab").forEach(tab => {
       tab.addEventListener("click", () => {
         document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -1144,7 +1390,7 @@ footer {
     });
 
     setDefaultConverterValues();
-    renderCalendar();
+    $("footerYear").textContent = new Date().getFullYear();
     resetToToday();
   });
 
