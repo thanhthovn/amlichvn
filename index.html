@@ -1309,7 +1309,7 @@ input:focus-visible {
 
   /* Cân lại tỷ lệ: ô ngày âm rộng rãi hơn, bảng bên phải gọn hơn */
   .lunar-row {
-    grid-template-columns: minmax(0, 1fr) 225px !important;
+    grid-template-columns: minmax(0, 2.16fr) 225px !important;
     gap: 12px !important;
   }
 
@@ -1336,6 +1336,123 @@ input:focus-visible {
     .lunar-info-side {
       max-width: none;
       width: 100%;
+    }
+  }
+
+
+  /* Tên tháng âm dài: luôn 1 dòng nhưng tự co để không tràn khung */
+  .lunar-main .day-block-month {
+    white-space: nowrap !important;
+    display: block !important;
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: clamp(10px, 2.8vw, 14px) !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    box-sizing: border-box !important;
+  }
+
+
+  /* ===== BỐ CỤC KHUNG THÁNG ÂM ===== */
+  .lunar-row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 225px !important;
+    gap: 14px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+
+  .lunar-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .lunar-main .day-block-month {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: calc(100% - 20px) !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    box-sizing: border-box !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 14px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  @media (max-width: 560px) {
+    .lunar-row {
+      grid-template-columns: 1fr !important;
+    }
+
+    .lunar-main .day-block-month {
+      max-width: calc(100% - 10px) !important;
+      font-size: 14px !important;
+    }
+  }
+
+
+  /* ===== KHUNG CHI TIẾT NGÀY: NỚI RỘNG TOÀN BỘ BLOCK ===== */
+  .day-block {
+    width: min(467px, 100%) !important;
+    max-width: 467px !important;
+  }
+
+  .lunar-row {
+    grid-template-columns: minmax(0, 1fr) 225px !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+
+  .lunar-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+  }
+
+  .lunar-main .day-block-month {
+    display: inline-block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    box-sizing: border-box !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 14px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  @media (max-width: 700px) {
+    .day-block {
+      width: min(467px, 100%) !important;
+      max-width: 467px !important;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .day-block {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .lunar-row {
+      grid-template-columns: 1fr !important;
+    }
+
+    .lunar-main .day-block-month {
+      max-width: 100% !important;
+      font-size: 14px !important;
     }
   }
 
@@ -1421,7 +1538,7 @@ input:focus-visible {
         <span id="selectedDayTitle" class="sr-only">Thông tin ngày</span>
         <div class="day-block-top">
           <span id="selectedMonthLabel">THÁNG</span>
-          <strong>2026</strong>
+          <strong id="selectedYear">2026</strong>
           <span id="selectedMonthEnglish">LUNAR CALENDAR</span>
         </div>
 
@@ -2007,14 +2124,13 @@ input:focus-visible {
       tbody.appendChild(row);
     }
 
-    const todayLunar = convertSolar2Lunar(
-      vietnamToday.day,
-      vietnamToday.month,
-      vietnamToday.year
-    );
+    // Thông tin Âm lịch phải đi theo THÁNG/NĂM đang hiển thị,
+    // không lấy theo ngày hiện tại.
+    // Dùng ngày 01 của tháng Dương đang xem để xác định tháng Âm tương ứng.
+    const displayedMonthLunar = convertSolar2Lunar(1, m, y);
 
     $("monthLunarInfo").textContent =
-      `Tháng ${canChiMonth(todayLunar[1], todayLunar[2])} • Năm ${canChiYear(todayLunar[2])}`;
+      `Tháng ${canChiMonth(displayedMonthLunar[1], displayedMonthLunar[2])} • Năm ${canChiYear(displayedMonthLunar[2])}`;
   }
 
   function showSelectedDate(d, m, y, lunar) {
@@ -2037,6 +2153,7 @@ input:focus-visible {
       (holiday ? ` • 🎉 ${holiday}` : "");
 
     $("selectedDayTitle").textContent = `${weekdayNames[date.getDay()]} • ${pad(d)}/${pad(m)}/${y}`;
+    $("selectedYear").textContent = y;
     $("selectedMonthLabel").textContent = `THÁNG ${m}`;
     $("selectedMonthEnglish").textContent = monthNames[m - 1];
     $("selectedDayTitle").textContent = `${weekdayNames[date.getDay()]} • ${pad(d)}/${pad(m)}/${y}`;
