@@ -587,13 +587,18 @@ footer {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 112px;
   min-width: 112px;
-  min-height: 34px;
-  padding: 6px 12px;
+  height: 34px;
+  padding: 0 12px;
+  margin: 0;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
   border: 1px solid #d9c7a6;
   border-radius: 8px;
   background: #fffdf8;
-  box-sizing: border-box;
   font-weight: 900;
 }
 
@@ -605,19 +610,6 @@ footer {
   color: #2e7d32;
 }
 
-.weekday-middle {
-  min-width: 76px;
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #8a5a16;
-  background: #fff4d6;
-  border-color: #e2c27b;
-  letter-spacing: 2px;
-  box-sizing: border-box;
-}
 
 
 
@@ -682,14 +674,17 @@ footer {
   text-align: right;
 }
 .day-block-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: 10px;
   min-height: 50px;
   padding: 9px 14px;
   background: #c62828;
   color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+
 }
 .day-block-footer #selectedHoliday {
   font-size: 12px;
@@ -1057,6 +1052,119 @@ input:focus-visible {
     font-size: 10px;
   }
 }
+
+/* FINAL FIX: Vietnamese and English weekday boxes use identical centering */
+#selectedWeekday {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  text-align: center !important;
+  gap: 90px !important;
+  box-sizing: border-box !important;
+
+  margin-top: 40px !important;
+}
+
+#selectedWeekday .weekday-vietnamese,
+#selectedWeekday .weekday-english {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 112px !important;
+  width: 112px !important;
+  min-width: 112px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  text-indent: 0 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  direction: ltr !important;
+}
+
+/* WEEKDAY FINAL: identical box + text metrics for both languages */
+#selectedWeekday .weekday-vietnamese,
+#selectedWeekday .weekday-english {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  float: none !important;
+  transform: none !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  width: 112px !important;
+  min-width: 112px !important;
+  max-width: 112px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid #d9c7a6 !important;
+  border-radius: 8px !important;
+  text-align: center !important;
+  text-indent: 0 !important;
+  line-height: 1 !important;
+  font-size: inherit !important;
+  font-weight: 900 !important;
+  letter-spacing: normal !important;
+  white-space: nowrap !important;
+}
+
+#selectedWeekday .weekday-english {
+  direction: ltr !important;
+  writing-mode: horizontal-tb !important;
+  unicode-bidi: normal !important;
+}
+
+
+#selectedWeekday .weekday-yinyang {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  width: 30px !important;
+  height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols", sans-serif !important;
+  font-size: 56px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+
+  -webkit-text-stroke: 1.5px #000;
+  text-shadow:
+    1px 0 #000, -1px 0 #000,
+    0 1px #000, 0 -1px #000;
+
+  transform: rotate(90deg);
+}
+
+#selectedWeekday {
+  gap: 45px !important;
+}
+
+
+.day-block-footer #closeSelectedDay {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
 </style>
 </head>
 <body>
@@ -1145,7 +1253,7 @@ input:focus-visible {
 
         <div class="day-block-main">
           <div class="day-block-number" id="selectedSolarDay">17</div>
-          <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span id="selectedWeekdayEnglish">MONDAY</span></div>
+          <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span class="weekday-box weekday-english">MONDAY</span></div>
           <div class="day-block-month" id="selectedSolarMonth">THÁNG 01</div>
         </div>
 
@@ -1175,7 +1283,7 @@ input:focus-visible {
 
         <div class="day-block-footer">
           <div id="selectedHoliday" hidden></div>
-          <button type="button" id="closeSelectedDay" aria-label="Đóng lịch block">ĐÓNG</button>
+          <button type="button" id="closeSelectedDay" aria-label="Đóng lịch block">ÂM LỊCH VIỆT NAM</button>
         </div>
       </section>
     </div>
@@ -1762,7 +1870,7 @@ input:focus-visible {
     $("selectedMonthEnglish").textContent = monthNames[m - 1];
     $("selectedWeekday").innerHTML =
       `<span class="weekday-box weekday-vietnamese">${weekdayNames[date.getDay()].toUpperCase()}</span>` +
-      `<span class="weekday-box weekday-middle"></span>` +
+      `<span class="weekday-yinyang" aria-hidden="true">☯</span>` +
       `<span class="weekday-box weekday-english">${weekdayEnglishNames[date.getDay()]}</span>`;
     $("selectedSolarDay").textContent = d;
     $("selectedSolarMonth").textContent = `THÁNG ${pad(m)}`;
@@ -1978,3 +2086,12 @@ input:focus-visible {
 </script>
 </body>
 </html>
+<style>
+.selected-weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 200px;
+  text-align: center;
+}
+</style>
