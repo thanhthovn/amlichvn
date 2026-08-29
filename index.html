@@ -27,7 +27,7 @@ body {
   margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--text);
-  background: #fff4df;
+  background: #f4f7ef;
 }
 
 button, input { font: inherit; }
@@ -739,16 +739,6 @@ footer {
   border-top: 1px solid #ead8bd;
 }
 
-.day-block-art {
-  min-height: 150px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #ead8bd;
-  background: #fff8e7;
-  color: #a65a22;
-  font-size: 52px;
-}
-
 .day-block-table {
   border: 1px solid #d7c4a4;
 }
@@ -836,15 +826,11 @@ footer {
   }
 
   .day-block-info {
-    grid-template-columns: 64px 1fr;
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .day-block-art {
-    min-height: 125px;
-    font-size: 38px;
-  }
+   display: block;
+   padding: 14px 18px 10px;
+   background: #fff;
+   border-top: 1px solid #ead8bd;
+ }
 
   .day-row span,
   .day-row strong {
@@ -858,6 +844,501 @@ input:focus-visible {
   outline: 3px solid rgba(198, 40, 40, .20);
   outline-offset: 2px;
 }
+
+  @media (max-width: 430px) {
+   .lunar-info-side {
+     padding: 0 10px 10px;
+   }
+  }
+
+
+  .lunar-row {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) 230px;
+   gap: 12px;
+   padding: 14px 18px 18px;
+   background: #fff;
+   border-top: 1px solid #ead8bd;
+   align-items: stretch;
+ }
+
+  .lunar-main {
+   min-height: 245px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   text-align: center;
+   padding: 18px 10px;
+   background:
+     radial-gradient(circle at center, rgba(255,255,255,.9), rgba(255,248,225,.7)),
+     #fffdf6;
+ }
+
+  .lunar-number {
+   margin: 0;
+   font-family: Impact, "Arial Black", sans-serif;
+   font-size: clamp(88px, 16vw, 136px);
+   line-height: .9;
+   color: #c62828;
+   text-shadow: 2px 3px 0 #f0d0d0, 0 5px 12px rgba(0,0,0,.15);
+ }
+
+  .lunar-main .day-block-month {
+   display: inline-block;
+   margin-top: 8px;
+   padding: 7px 20px;
+   background: #c62828;
+   color: #fff;
+   font-size: 14px;
+   font-weight: 900;
+ }
+
+  .lunar-info-side {
+   padding: 0;
+   background: transparent;
+ }
+
+  .lunar-info-side .day-block-table {
+   height: 100%;
+   border: 1px solid #d7c4a4;
+ }
+
+  .lunar-info-side .day-row {
+   min-height: 34px;
+ }
+
+  @media (max-width: 560px) {
+   .lunar-row {
+     grid-template-columns: 1fr;
+     padding: 10px;
+   }
+
+   .lunar-main {
+     min-height: 190px;
+   }
+
+   .lunar-number {
+     font-size: 120px;
+   }
+  }
+
+
+  .lunar-info-side {
+   display: flex;
+   align-items: center;
+   background: linear-gradient(145deg, #fff8e7, #fffdf6);
+   border: 1px solid #ead8bd;
+   border-radius: 12px;
+   padding: 10px;
+ }
+
+  .lunar-info-side .day-block-table {
+   width: 100%;
+   border: 1px solid #e0cda9;
+   border-radius: 9px;
+   overflow: hidden;
+   background: #fffdf6;
+ }
+
+  .lunar-info-side .day-row {
+   min-height: 42px;
+   border-bottom: 1px solid #ead8bd;
+ }
+
+  .lunar-info-side .day-row:last-child {
+   border-bottom: 0;
+ }
+
+  .lunar-info-side .day-row span {
+   background: #fff3d6;
+   color: #8b3a20;
+   font-weight: 800;
+ }
+
+  .lunar-info-side .day-row strong {
+   color: #c62828;
+   font-weight: 900;
+ }
+
+  /* Nền phần dưới block ngày âm */
+  .day-block {
+   background: #fffaf0;
+   border: 1px solid #d8c19b;
+   border-radius: 14px;
+ }
+
+  .day-block-main {
+   background:
+     radial-gradient(circle at 50% 35%, rgba(255,255,255,.98), rgba(255,248,225,.82)),
+     linear-gradient(180deg, #fffdf6 0%, #fff3d6 100%);
+ }
+
+  .lunar-main {
+   background:
+     radial-gradient(circle at center, rgba(255,255,255,.96), rgba(255,244,220,.88)),
+     linear-gradient(180deg, #fffdf6, #fff0d0);
+   border-radius: 10px;
+ }
+
+
+  /* ===== GIAO DIỆN MỚI ===== */
+  body {
+   background:
+     radial-gradient(circle at 15% 10%, rgba(198,40,40,.06), transparent 28%),
+     radial-gradient(circle at 85% 20%, rgba(46,125,50,.07), transparent 30%),
+     #f3f6ee;
+ }
+
+  .container {
+   background: transparent;
+ }
+
+  .calendar-card,
+  .converter-card,
+  .info-card {
+   background: #fffdf8;
+   border-color: #d9dfd2;
+ }
+
+  .calendar-table {
+   background: #fffdf8;
+ }
+
+  .calendar-table tbody td.day {
+   background: #fffdf8;
+   border-color: #dfe5da;
+ }
+
+  .calendar-table tbody td.day:hover {
+   background: #edf5ea;
+ }
+
+  .calendar-table tbody td.day.empty {
+   background: #f5f2e8;
+ }
+
+  .calendar-table thead th {
+   background: #dcebdc;
+   border-color: #bfd4bf;
+   color: #285d31;
+ }
+
+  .legend {
+   background: #f8faf4;
+   border-top-color: #dfe5da;
+ }
+
+  .date-search {
+   background: #fbfcf8;
+   border-top-color: #dfe5da;
+ }
+
+  .converter-card {
+   background: #fffaf0;
+ }
+
+  .section-heading {
+   background: transparent;
+ }
+
+  .day-block {
+   background: #fffdf8;
+   border-color: #d9c7a6;
+ }
+
+  .day-block-main,
+  .lunar-main {
+   background:
+     radial-gradient(circle at center, rgba(255,255,255,.98), rgba(255,248,225,.9)),
+     #fff8e7;
+ }
+
+  .lunar-info-side {
+   background: linear-gradient(145deg, #f8f5e9, #fffdf7);
+   border-color: #e0d6bd;
+ }
+
+  .lunar-info-side .day-block-table {
+   background: #fffdf8;
+   border-color: #dfd3b9;
+ }
+
+  .lunar-info-side .day-row span {
+   background: #f8edda;
+ }
+
+  .result {
+   background: #edf5ea;
+   color: #285d31;
+ }
+
+  footer {
+   background: transparent;
+ }
+
+
+
+  /* ===== THEME TỔNG THỂ - GỌN & ĐỒNG BỘ ===== */
+  body {
+    background: #eef3ed !important;
+    color: #33261f;
+  }
+
+  .topbar {
+    background: linear-gradient(135deg, #a91414 0%, #c62828 55%, #9d1c1c 100%) !important;
+  }
+
+  .container {
+    background: transparent;
+  }
+
+  .calendar-card,
+  .converter-card,
+  .info-card {
+    background: #fffdf8 !important;
+    border: 1px solid #dfe4dc !important;
+    box-shadow: 0 10px 28px rgba(55, 72, 55, .08) !important;
+  }
+
+  .calendar-toolbar {
+    background: linear-gradient(135deg, #9f1717 0%, #c62828 60%, #a51d1d 100%) !important;
+  }
+
+  .calendar-table {
+    background: #fffdf8 !important;
+  }
+
+  .calendar-table thead th {
+    background: #dcebdc !important;
+    border-color: #c4d8c5 !important;
+    color: #285d31 !important;
+  }
+
+  .calendar-table tbody td.day {
+    background: #fffdf8 !important;
+    border-color: #e1e5dd !important;
+  }
+
+  .calendar-table tbody td.day:hover {
+    background: #edf5ea !important;
+  }
+
+  .calendar-table tbody td.day.empty {
+    background: #f4f2e9 !important;
+  }
+
+  .calendar-table tbody td.day.adjacent-day {
+    background: #f7f7f1 !important;
+  }
+
+  .legend {
+    background: #f7faf5 !important;
+    border-top-color: #dfe5dc !important;
+  }
+
+  .date-search {
+    background: #f9fbf7 !important;
+    border-top-color: #dfe5dc !important;
+  }
+
+  .day-block {
+    background: #fffdf8 !important;
+    border: 1px solid #dccfb5 !important;
+    border-radius: 14px !important;
+  }
+
+  .day-block-main,
+  .lunar-main {
+    background:
+      radial-gradient(circle at center, rgba(255,255,255,.98), rgba(255,248,225,.9)),
+      #fff8e7 !important;
+  }
+
+  .lunar-row {
+    background: #f8f6ed !important;
+  }
+
+  .lunar-info-side {
+    background: #fffdf8 !important;
+    border: 1px solid #e0d8c6 !important;
+    border-radius: 10px !important;
+    padding: 8px !important;
+  }
+
+  .lunar-info-side .day-block-table {
+    background: #fffdf8 !important;
+    border-color: #e1d8c5 !important;
+    border-radius: 7px !important;
+  }
+
+  .lunar-info-side .day-row span {
+    background: #f6eddc !important;
+    color: #70452f !important;
+  }
+
+  .lunar-info-side .day-row strong {
+    color: #b52222 !important;
+  }
+
+  .converter-card {
+    background: #fffaf1 !important;
+  }
+
+  .result {
+    background: #edf5ea !important;
+    color: #285d31 !important;
+  }
+
+  footer {
+    background: transparent !important;
+  }
+
+
+  .lunar-row {
+    grid-template-columns: minmax(0, 1fr) 205px !important;
+    gap: 10px !important;
+  }
+
+  .lunar-info-side .day-row {
+    min-height: 38px !important;
+  }
+
+  .lunar-info-side .day-row span,
+  .lunar-info-side .day-row strong {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+
+  @media (max-width: 560px) {
+    .lunar-row {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+
+  .lunar-row {
+    align-items: start !important;
+  }
+
+  .lunar-main {
+    min-height: 0 !important;
+    height: 100% !important;
+    box-sizing: border-box;
+    padding: 16px 10px !important;
+  }
+
+  .lunar-info-side {
+    align-self: start !important;
+    height: fit-content !important;
+    box-sizing: border-box;
+  }
+
+  .lunar-info-side .day-block-table {
+    height: auto !important;
+  }
+
+  .lunar-info-side .day-row {
+    min-height: 34px !important;
+  }
+
+
+  /* ===== BẢNG THÔNG TIN BÊN PHẢI ===== */
+  .lunar-row {
+    grid-template-columns: minmax(0, 1fr) 270px !important;
+    gap: 14px !important;
+    align-items: start !important;
+  }
+
+  .lunar-info-side {
+    background: linear-gradient(145deg, #fff8e8 0%, #fffdf8 100%) !important;
+    border: 1px solid #dcc9a7 !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    box-shadow: 0 4px 12px rgba(100, 70, 35, .07);
+  }
+
+  .lunar-info-side .day-block-table {
+    width: 100%;
+    height: auto !important;
+    background: #fffdf8 !important;
+    border: 1px solid #e2d5bd !important;
+    border-radius: 8px !important;
+    overflow: hidden;
+  }
+
+  .lunar-info-side .day-row {
+    min-height: 48px !important;
+  }
+
+  .lunar-info-side .day-row span {
+    padding: 9px 11px !important;
+    background: #f4ead7 !important;
+    color: #6d422c !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+  }
+
+  .lunar-info-side .day-row strong {
+    padding: 9px 11px !important;
+    color: #b52222 !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Làm nền khối ngày âm đồng điệu với bảng bên phải */
+  .lunar-main {
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,.98), rgba(255,246,224,.92)),
+      #fff8e7 !important;
+    border: 1px solid #e2d2b5;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 560px) {
+    .lunar-row {
+      grid-template-columns: 1fr !important;
+    }
+
+    .lunar-info-side .day-row span,
+    .lunar-info-side .day-row strong {
+      font-size: 14px !important;
+    }
+  }
+
+
+  /* Cân lại tỷ lệ: ô ngày âm rộng rãi hơn, bảng bên phải gọn hơn */
+  .lunar-row {
+    grid-template-columns: minmax(0, 1fr) 225px !important;
+    gap: 12px !important;
+  }
+
+  .lunar-info-side {
+    max-width: 225px;
+    justify-self: end;
+  }
+
+  .lunar-info-side .day-row span,
+  .lunar-info-side .day-row strong {
+    padding: 8px 9px !important;
+  }
+
+  .lunar-main {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 560px) {
+    .lunar-row {
+      grid-template-columns: 1fr !important;
+    }
+
+    .lunar-info-side {
+      max-width: none;
+      width: 100%;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -950,17 +1431,14 @@ input:focus-visible {
           <div class="day-block-month" id="selectedSolarMonth">THÁNG 01</div>
         </div>
 
-        <div class="day-block-info">
-          <div class="day-block-art">☯</div>
-          <div class="day-block-table">
-            <div class="day-row">
-              <span>Ngày Dương</span>
-              <strong id="selectedSolar">17/01/2026</strong>
-            </div>
-            <div class="day-row">
-              <span>Ngày Âm</span>
-              <strong id="selectedLunar">29/11/2025</strong>
-            </div>
+        <div class="lunar-row">
+          <div class="lunar-main">
+            <div class="lunar-number" id="selectedLunarDay">29</div>
+            <div class="day-block-month" id="selectedLunarMonth">THÁNG 11</div>
+          </div>
+
+          <div class="lunar-info-side">
+            <div class="day-block-table">
             <div class="day-row">
               <span>Ngày</span>
               <strong id="selectedCanChiDay">Canh Tuất</strong>
@@ -973,6 +1451,7 @@ input:focus-visible {
               <span>Năm</span>
               <strong id="selectedCanChiYear">Ất Tỵ</strong>
             </div>
+          </div>
           </div>
         </div>
 
@@ -1225,6 +1704,11 @@ input:focus-visible {
 
   const CAN = ["Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ", "Canh", "Tân", "Nhâm", "Quý"];
   const CHI = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+  const LUNAR_MONTH_NAMES = [
+    "", "tháng Giêng", "tháng Hai", "tháng Ba", "tháng Tư", "tháng Năm",
+    "tháng Sáu", "tháng Bảy", "tháng Tám", "tháng Chín", "tháng Mười",
+    "tháng Mười Một", "tháng Chạp"
+  ];
   // Ngày lễ Việt Nam.
   const FIXED_HOLIDAYS = {
     "1-1": "Tết Dương lịch (Tết Tây)",
@@ -1559,9 +2043,9 @@ input:focus-visible {
     $("selectedWeekday").textContent = weekdayNames[date.getDay()].toUpperCase();
     $("selectedSolarDay").textContent = d;
     $("selectedSolarMonth").textContent = `THÁNG ${pad(m)}`;
-    $("selectedSolar").textContent = `${pad(d)}/${pad(m)}/${y}`;
-    $("selectedLunar").textContent =
-      `${pad(lunar[0])}/${pad(lunar[1])}/${lunar[2]}${lunar[3] ? " (NHUẬN)" : ""}`;
+    $("selectedLunarDay").textContent = lunar[0];
+    $("selectedLunarMonth").textContent =
+      `${LUNAR_MONTH_NAMES[lunar[1]].toUpperCase()}${lunar[3] ? " (N)" : ""}`;
     $("selectedCanChiDay").textContent = canChiDay(d, m, y);
     $("selectedCanChiMonth").textContent = canChiMonth(lunar[1], lunar[2]);
     $("selectedCanChiYear").textContent = canChiYear(lunar[2]);
