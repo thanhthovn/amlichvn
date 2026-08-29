@@ -1456,6 +1456,44 @@ input:focus-visible {
     }
   }
 
+
+  /* Tăng kích thước chữ hai bên thanh tháng dương */
+  .day-block-top span {
+    font-size: 16.5px !important;
+    font-weight: 900 !important;
+  }
+
+  .day-block-top strong {
+    font-size: 33px !important;
+  }
+
+  @media (max-width: 430px) {
+    .day-block-top span {
+      font-size: 13.5px !important;
+    }
+
+    .day-block-top strong {
+      font-size: 27px !important;
+    }
+  }
+
+
+  /* Bỏ nhãn THÁNG ... ngay dưới số ngày Dương */
+  #selectedSolarMonth {
+    display: none !important;
+  }
+
+  /* Tăng số ngày Dương lên 1,25 lần */
+  .day-block-number {
+    font-size: clamp(162.5px, 40vw, 237.5px) !important;
+  }
+
+  @media (max-width: 430px) {
+    .day-block-number {
+      font-size: 162.5px !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1574,7 +1612,7 @@ input:focus-visible {
 
         <div class="day-block-footer">
           <div id="selectedHoliday" hidden></div>
-          <button type="button" id="closeSelectedDay" aria-label="Đóng lịch block">Đóng</button>
+          <button type="button" id="closeSelectedDay" aria-label="Đóng lịch block">ÂM LỊCH VIỆT NAM</button>
         </div>
       </section>
     </div>
