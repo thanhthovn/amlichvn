@@ -484,9 +484,6 @@ footer {
 .calendar-table td.weekend .solar {
   color: #c62828;
 }
-.calendar-table td.saturday .solar {
-  color: #2e7d32;
-}
 .calendar-table td.today {
   background: #fff0f0 !important;
   box-shadow: inset 0 0 0 2px var(--red);
@@ -609,9 +606,6 @@ footer {
 .weekday-english {
   color: #2e7d32;
 }
-
-
-
 
 .day-block-week span {
   margin-left: 8px;
@@ -833,42 +827,132 @@ input:focus-visible {
   font-size: 13px !important;
   line-height: 1.25;
 }
-/* Final card/background overrides consolidated above. */
-#selectedSolarMonth {
-  display: none !important;
+
+/* ===== GIỜ HOÀNG ĐẠO / HẮC ĐẠO ===== */
+.auspicious-hours-section {
+  background: #fffaf0;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  overflow: hidden;
+  padding: 0;
 }
 
+.auspicious-hours-section .section-header {
+  padding: 16px 22px 10px;
+  background: transparent;
+}
 
+.auspicious-hours-section .section-header .eyebrow {
+  color: var(--red);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
 
+.auspicious-hours-section .auspicious-hours-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding: 14px 22px;
+  align-items: center;
+  border-bottom: 1px solid #ead8bd;
+}
 
+.auspicious-hours-section .auspicious-hours-row:last-child {
+  border-bottom: none;
+}
 
+.auspicious-hours-section .auspicious-hours-row strong {
+  color: #3b241b;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
 
+.auspicious-hours-section .hoang-dao-row {
+  background: linear-gradient(135deg, #fef7f0 0%, #fff8e7 100%);
+}
 
+.auspicious-hours-section .hoang-dao-row strong {
+  color: #c62828;
+}
 
+.auspicious-hours-section .hac-dao-row {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
 
+.auspicious-hours-section .hac-dao-row strong {
+  color: #555;
+}
 
+.auspicious-hours-section .auspicious-hours-row span {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #3b241b;
+  font-weight: 600;
+  padding: 4px 0;
+}
 
+.auspicious-hours-section .auspicious-hours-row .hour-badge {
+  display: inline-block;
+  background: #fff;
+  padding: 2px 10px;
+  margin: 2px 4px 2px 0;
+  border-radius: 4px;
+  border: 1px solid #d9c7a6;
+  font-size: 13px;
+  font-weight: 700;
+}
 
+.auspicious-hours-section .hoang-dao-row .hour-badge {
+  background: #fff8e7;
+  border-color: #c62828;
+  color: #c62828;
+}
 
+.auspicious-hours-section .hac-dao-row .hour-badge {
+  background: #f0f0f0;
+  border-color: #999;
+  color: #666;
+}
 
+@media (max-width: 700px) {
+  .auspicious-hours-section .auspicious-hours-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px 16px;
+  }
+  
+  .auspicious-hours-section .auspicious-hours-row strong {
+    font-size: 12px;
+  }
+  
+  .auspicious-hours-section .auspicious-hours-row span {
+    font-size: 13px;
+  }
+  
+  .auspicious-hours-section .auspicious-hours-row .hour-badge {
+    font-size: 11px;
+    padding: 1px 8px;
+  }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+@media (max-width: 430px) {
+  .auspicious-hours-section .auspicious-hours-row {
+    padding: 10px 14px;
+  }
+  
+  .auspicious-hours-section .auspicious-hours-row span {
+    font-size: 12px;
+  }
+  
+  .auspicious-hours-section .auspicious-hours-row .hour-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+}
 
 /* ===== Consolidated responsive rules ===== */
 
@@ -1064,7 +1148,6 @@ input:focus-visible {
 
 /* FINAL FIX: Vietnamese and English weekday boxes use identical centering */
 
-
 /* ===== Số ngày Âm trong lịch block: màu theo thứ ===== */
 .lunar-number.weekday-weekday {
   color: #111111 !important;
@@ -1075,7 +1158,6 @@ input:focus-visible {
 .lunar-number.weekday-sunday {
   color: #c62828 !important;
 }
-
 
 /* Nền tháng Âm trong lịch block */
 #selectedLunarMonth {
@@ -1166,7 +1248,6 @@ input:focus-visible {
   unicode-bidi: normal !important;
 }
 
-
 #selectedWeekday .weekday-yinyang {
   display: inline-flex !important;
   align-items: center !important;
@@ -1198,7 +1279,6 @@ input:focus-visible {
   gap: 45px !important;
 }
 
-
 .day-block-footer #closeSelectedDay {
   position: static !important;
   left: auto !important;
@@ -1209,7 +1289,6 @@ input:focus-visible {
   justify-content: center !important;
   text-align: center !important;
 }
-
 
 /* Màu số ngày Dương trong lịch block theo thứ */
 .day-block-number.weekday { color: #000 !important; }
@@ -1225,7 +1304,6 @@ input:focus-visible {
 #selectedSolarDay.weekday-sunday {
   color: #c62828 !important;
 }
-
 
 /* ===== Ô NGÀY LỄ ÂM BÊN PHẢI ===== */
 .lunar-info-side .lunar-holiday-row {
@@ -1319,14 +1397,17 @@ input:focus-visible {
 
     </section>
 
-
+    <!-- PHẦN GIỜ HOÀNG ĐẠO - HẮC ĐẠO VỚI KHUNG VÀ NỀN ĐẸP -->
     <section class="auspicious-hours-section" id="auspiciousHours" hidden>
+      <div class="section-header">
+        <span class="eyebrow">GIỜ HOÀNG ĐẠO - HẮC ĐẠO</span>
+      </div>
       <div class="auspicious-hours-row hoang-dao-row">
-        <strong>GIỜ HOÀNG ĐẠO:</strong>
+        <strong>🟢 GIỜ HOÀNG ĐẠO:</strong>
         <span id="hoangDaoText">—</span>
       </div>
       <div class="auspicious-hours-row hac-dao-row">
-        <strong>GIỜ HẮC ĐẠO:</strong>
+        <strong>⚫ GIỜ HẮC ĐẠO:</strong>
         <span id="hacDaoText">—</span>
       </div>
     </section>
@@ -1345,7 +1426,6 @@ input:focus-visible {
           <div class="day-block-number" id="selectedSolarDay">17</div>
           <div id="selectedHoliday" class="selected-holiday" hidden></div>
           <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span class="weekday-box weekday-english">MONDAY</span></div>
-          <div class="day-block-month" id="selectedSolarMonth">THÁNG 01</div>
         </div>
 
         <div class="lunar-row">
@@ -1437,10 +1517,7 @@ input:focus-visible {
   </footer>
 
   <script>
-/* Âm Lịch Việt Nam - browser version
- * Thuật toán chuyển đổi được chuyển từ thư viện amlich của Ho Ngoc Duc.
- * Múi giờ mặc định: Việt Nam (UTC+7).
- */
+/* Âm Lịch Việt Nam - browser version */
 (() => {
   "use strict";
 
@@ -1493,8 +1570,6 @@ input:focus-visible {
     const Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
     const F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
 
-    // Công thức Hồ Ngọc Đức: -0.4068*sin(M') + 0.0161*sin(2M').
-    // Hai hạng tử phải có dấu khác nhau.
     let C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) +
       0.0021 * Math.sin(2 * dr * M);
     C1 -= 0.4068 * Math.sin(Mpr * dr);
@@ -1628,7 +1703,6 @@ input:focus-visible {
     "tháng Sáu", "tháng Bảy", "tháng Tám", "tháng Chín", "tháng Mười",
     "tháng Mười Một", "tháng Chạp"
   ];
-  // Ngày lễ Việt Nam.
   const FIXED_HOLIDAYS = {
     "1-1": "Tết Dương lịch (Tết Tây)",
     "9-1": "Ngày truyền thống HSSV Việt Nam",
@@ -1688,13 +1762,13 @@ input:focus-visible {
   };
 
   function getNthWeekdayOfMonth(year, month, weekday, nth) {
-    // weekday: 0 = Chủ nhật ... 6 = Thứ bảy
     if (!Number.isInteger(year) || !Number.isInteger(month) ||
         !Number.isInteger(weekday) || !Number.isInteger(nth) ||
         month < 1 || month > 12 || weekday < 0 || weekday > 6 || nth < 1) {
       return null;
     }
     const first = new Date(year, month - 1, 1);
+    if (isNaN(first.getTime())) return null;
     const offset = (weekday - first.getDay() + 7) % 7;
     const day = 1 + offset + (nth - 1) * 7;
     return day <= daysInMonth(year, month) ? day : null;
@@ -1702,17 +1776,14 @@ input:focus-visible {
 
   function getDynamicHoliday(d, m, y) {
     const holidays = [];
-
-    // Chủ nhật thứ 2 của tháng 5: Ngày của Mẹ.
-    if (m === 5 && d === getNthWeekdayOfMonth(y, 5, 0, 2)) {
+    const motherDay = getNthWeekdayOfMonth(y, 5, 0, 2);
+    if (m === 5 && motherDay !== null && d === motherDay) {
       holidays.push("Ngày của mẹ");
     }
-
-    // Chủ nhật thứ 3 của tháng 6: Ngày của Cha.
-    if (m === 6 && d === getNthWeekdayOfMonth(y, 6, 0, 3)) {
+    const fatherDay = getNthWeekdayOfMonth(y, 6, 0, 3);
+    if (m === 6 && fatherDay !== null && d === fatherDay) {
       holidays.push("Ngày của cha");
     }
-
     return holidays;
   }
 
@@ -1730,7 +1801,6 @@ input:focus-visible {
     return holidays.join(" • ");
   }
 
-
   function mod(n, m) {
     return ((n % m) + m) % m;
   }
@@ -1744,26 +1814,26 @@ input:focus-visible {
     return `${CAN[mod(jd + 9, 10)]} ${CHI[mod(jd + 1, 12)]}`;
   }
 
+  function canChiMonth(lunarMonth, lunarYear) {
+    const yearCan = (lunarYear + 6) % 10;
+    const firstMonthCanMap = [2, 4, 6, 8, 0];
+    const firstMonthCan = firstMonthCanMap[yearCan % 5];
+    const canIndex = (firstMonthCan + lunarMonth - 1) % 10;
+    const chiIndex = (lunarMonth + 1) % 12;
+    return `${CAN[canIndex]} ${CHI[chiIndex]}`;
+  }
 
-  // ===== GIỜ HOÀNG ĐẠO / HẮC ĐẠO =====
-  // Quy tắc 6 giờ Hoàng Đạo theo Chi của ngày.
-  // Mỗi ngày có 6 giờ Hoàng Đạo và 6 giờ Hắc Đạo.
   const HOANG_DAO_BY_DAY_CHI = {
     "Tý":   ["Tý", "Dần", "Mão", "Ngọ", "Thân", "Dậu"],
     "Ngọ":  ["Tý", "Dần", "Mão", "Ngọ", "Thân", "Dậu"],
-
     "Sửu":  ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
     "Mùi":  ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
-
     "Dần":  ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
     "Thân": ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
-
     "Mão":  ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
     "Dậu":  ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
-
     "Thìn": ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
     "Tuất": ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
-
     "Tỵ":   ["Sửu", "Thìn", "Ngọ", "Mùi", "Tuất", "Hợi"],
     "Hợi":  ["Sửu", "Thìn", "Ngọ", "Mùi", "Tuất", "Hợi"]
   };
@@ -1787,7 +1857,6 @@ input:focus-visible {
     const dayCanChi = canChiDay(d, m, y);
     const dayChi = dayCanChi.split(" ")[1];
     const hoangDao = new Set(HOANG_DAO_BY_DAY_CHI[dayChi] || []);
-
     return CHI.map((chi) => ({
       chi,
       range: HOUR_RANGES[chi],
@@ -1795,40 +1864,29 @@ input:focus-visible {
     }));
   }
 
+  // ===== UPDATED: renderGioHoangDao with badges =====
   function renderGioHoangDao(d, m, y) {
     const box = $("auspiciousHours");
     const hoangDaoText = $("hoangDaoText");
     const hacDaoText = $("hacDaoText");
     if (!box || !hoangDaoText || !hacDaoText) return;
 
-    const dayCanChi = canChiDay(d, m, y);
-    const dayChi = dayCanChi.split(" ")[1];
     const hours = getGioHoangDao(d, m, y);
-
-    const hoangDao = hours
+    
+    // Tạo badge cho từng giờ Hoàng Đạo
+    const hoangDaoHours = hours
       .filter(hour => hour.isHoangDao)
-      .map(hour => `${hour.chi} (${hour.range})`)
-      .join(", ");
-
-    const hacDao = hours
+      .map(hour => `<span class="hour-badge">${hour.chi} (${hour.range})</span>`)
+      .join(" ");
+    
+    const hacDaoHours = hours
       .filter(hour => !hour.isHoangDao)
-      .map(hour => `${hour.chi} (${hour.range})`)
-      .join(", ");
+      .map(hour => `<span class="hour-badge">${hour.chi} (${hour.range})</span>`)
+      .join(" ");
 
-    hoangDaoText.textContent = hoangDao || "—";
-    hacDaoText.textContent = hacDao || "—";
+    hoangDaoText.innerHTML = hoangDaoHours || "—";
+    hacDaoText.innerHTML = hacDaoHours || "—";
     box.hidden = false;
-  }
-
-  function canChiMonth(lunarMonth, lunarYear) {
-    // Can tháng Giêng được xác định theo Can của năm:
-    // Giáp/Kỷ -> Bính Dần; Ất/Canh -> Mậu Dần;
-    // Bính/Tân -> Canh Dần; Đinh/Nhâm -> Nhâm Dần;
-    // Mậu/Quý -> Giáp Dần.
-    const yearCan = (lunarYear + 6) % 10;
-    const firstMonthCan = (yearCan % 5) * 2 + 2;
-    const can = CAN[mod(firstMonthCan + lunarMonth - 1, 10)];
-    return `${can} ${CHI[mod(lunarMonth + 1, 12)]}`;
   }
 
   function formatLunar(lunar) {
@@ -1836,22 +1894,33 @@ input:focus-visible {
   }
 
   function validSolar(d, m, y) {
-    const dt = makeCalendarDate(y, m, d);
+    if (!Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y)) return false;
+    if (y < 1 || m < 1 || m > 12 || d < 1) return false;
+    const maxDay = daysInMonth(y, m);
+    if (d > maxDay) return false;
+    const dt = new Date(y, m - 1, d);
     return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
   }
 
-  // Ngày hiện tại luôn theo múi giờ Việt Nam (UTC+7).
-  // Không phụ thuộc múi giờ của máy người dùng.
   function getVietnamToday() {
-    const now = new Date();
-    const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
-    const vietnamMs = utcMs + TIME_ZONE * 60 * 60 * 1000;
-    const vietnam = new Date(vietnamMs);
-    return {
-      year: vietnam.getUTCFullYear(),
-      month: vietnam.getUTCMonth() + 1,
-      day: vietnam.getUTCDate()
-    };
+    try {
+      const now = new Date();
+      const utcMs = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+      const vietnamMs = utcMs + TIME_ZONE * 60 * 60 * 1000;
+      const vietnam = new Date(vietnamMs);
+      return {
+        year: vietnam.getUTCFullYear(),
+        month: vietnam.getUTCMonth() + 1,
+        day: vietnam.getUTCDate()
+      };
+    } catch (e) {
+      const now = new Date();
+      return {
+        year: now.getFullYear(),
+        month: now.getMonth() + 1,
+        day: now.getDate()
+      };
+    }
   }
 
   function makeCalendarDate(year, month, day) {
@@ -1880,7 +1949,6 @@ input:focus-visible {
     let count = 0;
     let firstLunar = null;
 
-    // Hiển thị những ngày cuối tháng trước ở các ô đầu tuần.
     const prevMonthDate = new Date(y, m - 2, 1);
     const prevYear = prevMonthDate.getFullYear();
     const prevMonth = prevMonthDate.getMonth() + 1;
@@ -1919,10 +1987,6 @@ input:focus-visible {
 
       if (weekday === 0 || weekday === 6) {
         td.classList.add("weekend");
-      }
-
-      if (weekday === 6) {
-        td.classList.add("saturday");
       }
 
       if (key === todayKey) {
@@ -1972,7 +2036,6 @@ input:focus-visible {
       }
     }
 
-    // Hiển thị những ngày đầu tháng sau để đủ 7 cột.
     if (count > 0) {
       const nextMonthDate = new Date(y, m, 1);
       const nextYear = nextMonthDate.getFullYear();
@@ -1998,11 +2061,7 @@ input:focus-visible {
       tbody.appendChild(row);
     }
 
-    // Thông tin Âm lịch phải đi theo THÁNG/NĂM đang hiển thị,
-    // không lấy theo ngày hiện tại.
-    // Dùng ngày 01 của tháng Dương đang xem để xác định tháng Âm tương ứng.
     const displayedMonthLunar = convertSolar2Lunar(1, m, y);
-
     $("monthLunarInfo").textContent =
       `Tháng ${canChiMonth(displayedMonthLunar[1], displayedMonthLunar[2])} • Năm ${canChiYear(displayedMonthLunar[2])}`;
   }
@@ -2039,12 +2098,9 @@ input:focus-visible {
       `<span class="weekday-box weekday-vietnamese">${weekdayNames[date.getDay()].toUpperCase()}</span>` +
       `<span class="weekday-yinyang" aria-hidden="true">☯</span>` +
       `<span class="weekday-box weekday-english">${weekdayEnglishNames[date.getDay()]}</span>`;
+    
     const solarDayEl = $("selectedSolarDay");
     solarDayEl.textContent = d;
-
-    // Màu số Dương theo thứ:
-    // T2–T6 = đen, T7 = xanh lá, CN = đỏ.
-    // Nếu là lễ Dương thì luôn ưu tiên: đỏ + viền vàng.
     solarDayEl.className = "day-block-number";
     if (solarHoliday) {
       solarDayEl.classList.add("solar-holiday");
@@ -2055,7 +2111,7 @@ input:focus-visible {
     } else {
       solarDayEl.classList.add("weekday-weekday");
     }
-    $("selectedSolarMonth").textContent = `THÁNG ${pad(m)}`;
+
     const lunarDayEl = $("selectedLunarDay");
     lunarDayEl.textContent = lunar[0];
     lunarDayEl.className = "lunar-number";
@@ -2067,7 +2123,6 @@ input:focus-visible {
       lunarDayEl.classList.add("weekday-weekday");
     }
 
-    // Ngày lễ Âm: ưu tiên màu đỏ + viền vàng.
     const lunarHoliday = lunar[3]
       ? ""
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
@@ -2075,8 +2130,9 @@ input:focus-visible {
       lunarDayEl.classList.add("lunar-holiday");
     }
 
+    const monthName = LUNAR_MONTH_NAMES[lunar[1]] || `Tháng ${lunar[1]}`;
     $("selectedLunarMonth").textContent =
-      `${LUNAR_MONTH_NAMES[lunar[1]].toUpperCase()}${lunar[3] ? " (N)" : ""}`;
+      `${monthName.toUpperCase()}${lunar[3] ? " (N)" : ""}`;
     $("selectedCanChiDay").textContent = canChiDay(d, m, y);
     $("selectedCanChiMonth").textContent = canChiMonth(lunar[1], lunar[2]);
     $("selectedCanChiYear").textContent = canChiYear(lunar[2]);
@@ -2086,7 +2142,7 @@ input:focus-visible {
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
     $("selectedLunarHoliday").textContent = lunarHolidayText || "—";
 
-    // Tính và hiển thị 12 giờ Hoàng Đạo/Hắc Đạo theo Chi của ngày.
+    // Gọi render giờ Hoàng Đạo với badge
     renderGioHoangDao(d, m, y);
 
     const holidayEl = $("selectedHoliday");
@@ -2197,8 +2253,6 @@ input:focus-visible {
       return;
     }
 
-    // Kiểm tra ngược để loại các ngày vượt quá số ngày thực tế
-    // của tháng âm (ví dụ ngày 30 ở tháng chỉ có 29 ngày).
     const check = convertSolar2Lunar(solar[0], solar[1], solar[2]);
     if (
       check[0] !== d ||
@@ -2287,7 +2341,6 @@ input:focus-visible {
     resetToToday();
   });
 
-  // Expose the conversion functions for console/debugging if needed.
   window.AmLich = { convertSolar2Lunar, convertLunar2Solar, jdFromDate, jdToDate };
 })();
 
