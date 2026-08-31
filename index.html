@@ -365,6 +365,23 @@ footer {
 .date-search-actions .date-search-btn {
   flex: 2 1 0;
 }
+.date-search-actions .brain-btn {
+  flex: 1 1 0;
+  background: #6a1b9a;
+  border: 0;
+  border-radius: 11px;
+  padding: 10px 12px;
+  height: 42px;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  transition: .2s;
+  font-size: 20px;
+}
+.date-search-actions .brain-btn:hover {
+  background: #4a148c;
+  transform: translateY(-1px);
+}
 .date-search-btn,
 .today-btn {
   border: 0;
@@ -1001,6 +1018,150 @@ input:focus-visible {
   font-weight: 800 !important;
 }
 
+/* ===== HOLIDAYS LIST MODAL ===== */
+.holidays-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.holidays-modal[hidden] {
+  display: none;
+}
+.holidays-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(35, 20, 12, .58);
+  backdrop-filter: blur(3px);
+}
+.holidays-panel {
+  position: relative;
+  z-index: 1;
+  width: min(800px, 100%);
+  max-width: 800px;
+  max-height: 90vh;
+  background: #fffdf8;
+  border: 1px solid #d9c7a6;
+  border-radius: 18px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.30);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.holidays-header {
+  background: #c62828;
+  color: #ffe58a;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 5px solid #e7b83f;
+}
+.holidays-header h2 {
+  margin: 0;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.holidays-header button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 8px;
+  padding: 8px 18px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 16px;
+}
+.holidays-header button:hover {
+  background: rgba(255,255,255,.15);
+}
+.holidays-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+}
+.holidays-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.holidays-body th {
+  background: #f4ead7;
+  color: #3b241b;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 800;
+  border-bottom: 2px solid #d9c7a6;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.holidays-body td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #ead8bd;
+  vertical-align: top;
+}
+.holidays-body tr:hover td {
+  background: #fff8e7;
+}
+.holidays-body .type-solar {
+  color: #c62828;
+  font-weight: 700;
+}
+.holidays-body .type-lunar {
+  color: #2e7d32;
+  font-weight: 700;
+}
+.holidays-body .type-birthday {
+  color: #7b1fa2;
+  font-weight: 700;
+}
+.holidays-body .type-anniversary {
+  color: #2e7d32;
+  font-weight: 700;
+}
+.holidays-body .date-col {
+  font-weight: 700;
+  color: #3b241b;
+  white-space: nowrap;
+}
+.holidays-body .name-col {
+  color: #3b241b;
+}
+.holidays-body .badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.holidays-body .badge-solar {
+  background: #ffebee;
+  color: #c62828;
+}
+.holidays-body .badge-lunar {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.holidays-body .badge-birthday {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+.holidays-body .badge-anniversary {
+  background: #e0f2f1;
+  color: #00695c;
+}
+.holidays-body .no-data {
+  text-align: center;
+  color: #765d50;
+  padding: 40px 0;
+  font-style: italic;
+}
+
 /* ===== Consolidated responsive rules ===== */
 @media (max-width: 700px) {
   .container {
@@ -1037,7 +1198,7 @@ input:focus-visible {
   .date-search-actions {
     grid-column: 1 / -1;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   .calendar-table {
@@ -1069,6 +1230,20 @@ input:focus-visible {
   .day-block {
     width: min(467px, 100%);
     max-width: 467px;
+  }
+
+  .holidays-body {
+    padding: 12px 14px;
+  }
+  .holidays-body table {
+    font-size: 12px;
+  }
+  .holidays-body th,
+  .holidays-body td {
+    padding: 6px 8px;
+  }
+  .holidays-panel {
+    max-width: 100%;
   }
 }
 
@@ -1189,6 +1364,16 @@ input:focus-visible {
   .day-row strong {
     padding: 6px;
     font-size: 10px;
+  }
+
+  .date-search-actions {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .date-search-actions .date-search-btn,
+  .date-search-actions .today-btn,
+  .date-search-actions .brain-btn {
+    font-size: 12px;
+    padding: 8px 6px;
   }
 }
 
@@ -1321,7 +1506,6 @@ input:focus-visible {
 }
 
 #selectedWeekday {
-  /* Khoảng cách cố định giữa Thứ tiếng Việt - ☯ - Thứ tiếng Anh */
   gap: 45px !important;
 }
 
@@ -1427,6 +1611,7 @@ input:focus-visible {
         </label>
         <div class="date-search-actions">
           <button type="button" class="date-search-btn today-inline-btn" id="searchDateBtn">Tìm ngày</button>
+          <button type="button" class="brain-btn" id="brainBtn" title="Xem tất cả ngày lễ trong năm">🧠</button>
           <button type="button" class="today-btn today-inline-btn" id="todayBtn">HÔM NAY</button>
         </div>
       </div>
@@ -1454,19 +1639,33 @@ input:focus-visible {
     </section>
 
     <!-- PHẦN GIỜ HOÀNG ĐẠO - HẮC ĐẠO VỚI KHUNG VÀ NỀN ĐẸP -->
-    <section class="auspicious-hours-section" id="auspiciousHours" hidden>
+    <section class="auspicious-hours-section" id="auspiciousHours">
       <div class="section-header">
         <span class="eyebrow">GIỜ HOÀNG ĐẠO - HẮC ĐẠO</span>
       </div>
       <div class="auspicious-hours-row hoang-dao-row">
         <strong>🟢 GIỜ HOÀNG ĐẠO:</strong>
-        <span id="hoangDaoText">—</span>
+        <span id="hoangDaoText">Đang tải...</span>
       </div>
       <div class="auspicious-hours-row hac-dao-row">
         <strong>⚫ GIỜ HẮC ĐẠO:</strong>
-        <span id="hacDaoText">—</span>
+        <span id="hacDaoText">Đang tải...</span>
       </div>
     </section>
+
+    <!-- HOLIDAYS LIST MODAL -->
+    <div class="holidays-modal" id="holidaysModal" hidden aria-hidden="true">
+      <div class="holidays-modal-backdrop" id="holidaysModalBackdrop"></div>
+      <section class="holidays-panel" role="dialog" aria-modal="true" aria-labelledby="holidaysTitle">
+        <div class="holidays-header">
+          <h2><span>🧠</span> DANH SÁCH NGÀY LỄ - SỰ KIỆN TRONG NĂM</h2>
+          <button type="button" id="closeHolidaysModal">✕ Đóng</button>
+        </div>
+        <div class="holidays-body" id="holidaysBody">
+          <div id="holidaysContent">Đang tải...</div>
+        </div>
+      </section>
+    </div>
 
     <div class="day-modal" id="selectedDayModal" hidden aria-hidden="true">
       <div class="day-modal-backdrop" id="dayModalBackdrop"></div>
@@ -1482,7 +1681,6 @@ input:focus-visible {
           <div class="day-block-number" id="selectedSolarDay">17</div>
           <div id="selectedHoliday" class="selected-holiday" hidden></div>
           <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span class="weekday-box weekday-english">MONDAY</span></div>
-          <!-- Đã xóa tháng Dương -->
         </div>
 
         <div class="lunar-row">
@@ -1686,6 +1884,10 @@ input:focus-visible {
   }
 
   function convertSolar2Lunar(dd, mm, yy, timeZone = TIME_ZONE) {
+    if (!dd || !mm || !yy || dd < 1 || mm < 1 || yy < 1800 || yy > 2199) {
+      return [0, 0, 0, 0];
+    }
+    
     const dayNumber = jdFromDate(dd, mm, yy);
     const k = INT((dayNumber - 2415021.076998695) / 29.530588853);
     let monthStart = getNewMoonDay(k + 1, timeZone);
@@ -1723,8 +1925,7 @@ input:focus-visible {
   }
 
   function convertLunar2Solar(lunarDay, lunarMonth, lunarYear, lunarLeap, timeZone = TIME_ZONE) {
-    // FIXED: Kiểm tra input hợp lệ
-    if (lunarMonth < 1 || lunarMonth > 12 || lunarDay < 1 || lunarDay > 30) {
+    if (lunarMonth < 1 || lunarMonth > 12 || lunarDay < 1 || lunarDay > 30 || lunarYear < 1800 || lunarYear > 2199) {
       return [0, 0, 0];
     }
     
@@ -1746,10 +1947,9 @@ input:focus-visible {
       let leapMonth = leapOff - 2;
       if (leapMonth < 0) leapMonth += 12;
       
-      // FIXED: Kiểm tra tháng nhuận chặt chẽ hơn
       if (lunarLeap !== 0 && lunarMonth !== leapMonth) return [0, 0, 0];
       if (lunarLeap === 0 && off >= leapOff && off < leapOff + 1) {
-        return [0, 0, 0]; // Tháng nhuận nhưng không đánh dấu
+        return [0, 0, 0];
       }
       if (lunarLeap !== 0 || off >= leapOff) off += 1;
     }
@@ -1810,8 +2010,9 @@ input:focus-visible {
     "24-12": "Lễ Giáng sinh"
   };
 
-  // Sinh nhật / sự kiện cố định theo DƯƠNG LỊCH
   const FIXED_BIRTHDAY = {
+    "27-2": "Sinh nhật anh 2",
+    "6-9": "Sinh nhật Thảo",
     "23-12": "Sinh nhật Hải Long"
   };
 
@@ -1833,13 +2034,15 @@ input:focus-visible {
     "23-12": "Ông Táo về trời"
   };
 
-  // Ngày giỗ / kỷ niệm Âm lịch — KHÔNG phải ngày Dương lịch
   const LUNAR_ANNIVERSARY = {
-    "11-8": "Giỗ bà nội"
+    "9-2": "Giỗ bà ngoại vợ",
+    "25-2": "Giỗ ông ngoại",
+    "27-3": "Giỗ ông ngoại vợ",
+    "11-8": "Giỗ bà nội",
+    "16-11": "Giỗ ông nội",
+    "10-12": "Giỗ cha vợ",
   };
 
-
-  // FIXED: Thêm kiểm tra year hợp lệ
   function getNthWeekdayOfMonth(year, month, weekday, nth) {
     if (!Number.isInteger(year) || !Number.isInteger(month) ||
         !Number.isInteger(weekday) || !Number.isInteger(nth) ||
@@ -1911,9 +2114,8 @@ input:focus-visible {
     return `${CAN[mod(jd + 9, 10)]} ${CHI[mod(jd + 1, 12)]}`;
   }
 
-  // FIXED: Kiểm tra lunarMonth hợp lệ
   function canChiMonth(lunarMonth, lunarYear) {
-    if (lunarMonth < 1 || lunarMonth > 12) return "Tháng không hợp lệ";
+    if (!lunarMonth || lunarMonth < 1 || lunarMonth > 12) return "Tháng không hợp lệ";
     const yearCan = (lunarYear + 6) % 10;
     const firstMonthCanMap = [2, 4, 6, 8, 0];
     const firstMonthCan = firstMonthCanMap[yearCan % 5];
@@ -1952,7 +2154,6 @@ input:focus-visible {
     "Hợi": "21h–23h"
   };
 
-  // FIXED: Xử lý dayChi undefined
   function getGioHoangDao(d, m, y) {
     const dayCanChi = canChiDay(d, m, y);
     const parts = dayCanChi.split(" ");
@@ -1983,16 +2184,16 @@ input:focus-visible {
       .map(hour => `<span class="hour-badge">${hour.chi} (${hour.range})</span>`)
       .join(" ");
 
-    hoangDaoText.innerHTML = hoangDaoHours || "—";
-    hacDaoText.innerHTML = hacDaoHours || "—";
+    hoangDaoText.innerHTML = hoangDaoHours || "Không có giờ Hoàng Đạo";
+    hacDaoText.innerHTML = hacDaoHours || "Không có giờ Hắc Đạo";
     box.hidden = false;
   }
 
   function formatLunar(lunar) {
+    if (!lunar || lunar[0] === 0) return "--/--";
     return `${lunar[0]}/${lunar[1]}${lunar[3] ? " nhuận" : ""}`;
   }
 
-  // FIXED: Kiểm tra year hợp lệ
   function validSolar(d, m, y) {
     if (!Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y)) return false;
     if (y < 1800 || y > 2199 || m < 1 || m > 12 || d < 1) return false;
@@ -2027,11 +2228,174 @@ input:focus-visible {
     return new Date(year, month - 1, day);
   }
 
+  // ===================== HOLIDAYS LIST =====================
+  function getAllHolidays(year) {
+    const holidays = [];
+    const seen = new Set();
+
+    // Dương lịch
+    for (const [key, name] of Object.entries(FIXED_HOLIDAYS)) {
+      const [d, m] = key.split("-").map(Number);
+      const lunar = convertSolar2Lunar(d, m, year);
+      const lunarKey = `${lunar[0]}-${lunar[1]}`;
+      const isLunarHoliday = LUNAR_HOLIDAYS[lunarKey] || "";
+      const uniqueKey = `solar-${key}`;
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        holidays.push({
+          type: "solar",
+          date: `${pad(d)}/${pad(m)}`,
+          name: name,
+          lunarDate: lunar[0] > 0 ? `${pad(lunar[0])}/${pad(lunar[1])}` : "",
+          isLunarHoliday: isLunarHoliday
+        });
+      }
+    }
+
+    // Sinh nhật Dương lịch
+    for (const [key, name] of Object.entries(FIXED_BIRTHDAY)) {
+      const [d, m] = key.split("-").map(Number);
+      const uniqueKey = `birthday-${key}`;
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        holidays.push({
+          type: "birthday",
+          date: `${pad(d)}/${pad(m)}`,
+          name: `🎂 ${name}`,
+          lunarDate: "",
+          isLunarHoliday: ""
+        });
+      }
+    }
+
+    // Âm lịch - Ngày lễ
+    for (const [key, name] of Object.entries(LUNAR_HOLIDAYS)) {
+      const [d, m] = key.split("-").map(Number);
+      const uniqueKey = `lunar-holiday-${key}`;
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        // Tìm ngày Dương tương ứng
+        const solar = convertLunar2Solar(d, m, year, 0);
+        const solarDate = solar[0] > 0 ? `${pad(solar[0])}/${pad(solar[1])}` : "";
+        holidays.push({
+          type: "lunar",
+          date: `${pad(d)}/${pad(m)} (ÂL)`,
+          name: name,
+          lunarDate: `${pad(d)}/${pad(m)}`,
+          solarDate: solarDate
+        });
+      }
+    }
+
+    // Âm lịch - Giỗ kỷ niệm
+    for (const [key, name] of Object.entries(LUNAR_ANNIVERSARY)) {
+      const [d, m] = key.split("-").map(Number);
+      const uniqueKey = `anniversary-${key}`;
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        const solar = convertLunar2Solar(d, m, year, 0);
+        const solarDate = solar[0] > 0 ? `${pad(solar[0])}/${pad(solar[1])}` : "";
+        holidays.push({
+          type: "anniversary",
+          date: `${pad(d)}/${pad(m)} (ÂL)`,
+          name: `🕯️ ${name}`,
+          lunarDate: `${pad(d)}/${pad(m)}`,
+          solarDate: solarDate
+        });
+      }
+    }
+
+    // Sắp xếp theo tháng/ngày
+    holidays.sort((a, b) => {
+      const aParts = a.date.split("/").map(Number);
+      const bParts = b.date.split("/").map(Number);
+      if (aParts[1] !== bParts[1]) return aParts[1] - bParts[1];
+      return aParts[0] - bParts[0];
+    });
+
+    return holidays;
+  }
+
+  function renderHolidaysList(year) {
+    const container = $("holidaysContent");
+    if (!container) return;
+
+    const holidays = getAllHolidays(year);
+    
+    if (holidays.length === 0) {
+      container.innerHTML = '<div class="no-data">Không có ngày lễ nào trong năm này.</div>';
+      return;
+    }
+
+    let html = `
+      <table>
+        <thead>
+          <tr>
+            <th style="width:15%">Ngày</th>
+            <th style="width:15%">Loại</th>
+            <th style="width:45%">Tên sự kiện</th>
+            <th style="width:25%">Ngày Âm lịch</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    const typeLabels = {
+      solar: '<span class="badge badge-solar">Dương lịch</span>',
+      lunar: '<span class="badge badge-lunar">Âm lịch</span>',
+      birthday: '<span class="badge badge-birthday">Sinh nhật</span>',
+      anniversary: '<span class="badge badge-anniversary">Giỗ/Kỷ niệm</span>'
+    };
+
+    for (const item of holidays) {
+      const typeLabel = typeLabels[item.type] || '';
+      let lunarDisplay = item.lunarDate || '';
+      if (item.solarDate && item.type === 'lunar') {
+        lunarDisplay = `${item.lunarDate} (DL: ${item.solarDate})`;
+      } else if (item.solarDate && item.type === 'anniversary') {
+        lunarDisplay = `${item.lunarDate} (DL: ${item.solarDate})`;
+      }
+      html += `
+        <tr>
+          <td class="date-col">${item.date}</td>
+          <td>${typeLabel}</td>
+          <td class="name-col">${item.name}</td>
+          <td>${lunarDisplay || '—'}</td>
+        </tr>
+      `;
+    }
+
+    html += `</tbody></table>`;
+    container.innerHTML = html;
+  }
+
+  function showHolidaysModal() {
+    const modal = $("holidaysModal");
+    if (!modal) return;
+    
+    const year = current.getFullYear();
+    renderHolidaysList(year);
+    
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+    const closeBtn = $("closeHolidaysModal");
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function closeHolidaysModal() {
+    const modal = $("holidaysModal");
+    if (modal) {
+      modal.hidden = true;
+      modal.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  // ===================== CALENDAR RENDER =====================
+
   const vietnamToday = getVietnamToday();
   let current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
   const todayKey = `${vietnamToday.year}-${vietnamToday.month}-${vietnamToday.day}`;
   let selectedDateKey = null;
-  // Click 2 lần cùng một ngày mới mở block thông tin ngày
   let lastClickedDateKey = null;
 
   function renderCalendar() {
@@ -2123,16 +2487,17 @@ input:focus-visible {
       const selectDate = () => {
         const newKey = `${y}-${m}-${d}`;
 
-        if (lastClickedDateKey === newKey) {
-          // Click lần 2 vào đúng ngày đang chọn → mở block
+        if (lastClickedDateKey === newKey && selectedDateKey === newKey) {
           selectedDateKey = newKey;
           showSelectedDate(d, m, y, lunar, true);
-        } else {
-          // Click lần 1 → chọn ngày + cập nhật toàn bộ thông tin, nhưng chưa mở block
+        } else if (selectedDateKey !== newKey) {
           selectedDateKey = newKey;
           lastClickedDateKey = newKey;
           renderCalendar();
           showSelectedDate(d, m, y, lunar, false);
+        } else {
+          lastClickedDateKey = newKey;
+          renderCalendar();
         }
       };
 
@@ -2215,98 +2580,124 @@ input:focus-visible {
       (holiday ? ` • 🎉 ${holiday}` : "") +
       (fixedBirthday ? ` • 🎂 ${fixedBirthday}` : "");
 
-    $("selectedDayTitle").textContent = `${weekdayNames[date.getDay()]} • ${pad(d)}/${pad(m)}/${y}`;
-    $("selectedYear").textContent = y;
-    $("selectedMonthLabel").textContent = `THÁNG ${m}`;
-    $("selectedMonthEnglish").textContent = monthNames[m - 1];
-    $("selectedWeekday").innerHTML =
-      `<span class="weekday-box weekday-vietnamese">${weekdayNames[date.getDay()].toUpperCase()}</span>` +
-      `<span class="weekday-yinyang" aria-hidden="true">☯</span>` +
-      `<span class="weekday-box weekday-english">${weekdayEnglishNames[date.getDay()]}</span>`;
+    const titleEl = $("selectedDayTitle");
+    if (titleEl) {
+      titleEl.textContent = `${weekdayNames[date.getDay()]} • ${pad(d)}/${pad(m)}/${y}`;
+    }
+    
+    const yearEl = $("selectedYear");
+    if (yearEl) yearEl.textContent = y;
+    
+    const monthLabelEl = $("selectedMonthLabel");
+    if (monthLabelEl) monthLabelEl.textContent = `THÁNG ${m}`;
+    
+    const monthEnglishEl = $("selectedMonthEnglish");
+    if (monthEnglishEl) monthEnglishEl.textContent = monthNames[m - 1];
+    
+    const weekdayEl = $("selectedWeekday");
+    if (weekdayEl) {
+      weekdayEl.innerHTML =
+        `<span class="weekday-box weekday-vietnamese">${weekdayNames[date.getDay()].toUpperCase()}</span>` +
+        `<span class="weekday-yinyang" aria-hidden="true">☯</span>` +
+        `<span class="weekday-box weekday-english">${weekdayEnglishNames[date.getDay()]}</span>`;
+    }
     
     const solarDayEl = $("selectedSolarDay");
-    solarDayEl.textContent = d;
-    solarDayEl.className = "day-block-number";
-    if (solarHoliday) {
-      solarDayEl.classList.add("solar-holiday");
-    } else if (date.getDay() === 6) {
-      solarDayEl.classList.add("weekday-saturday");
-    } else if (date.getDay() === 0) {
-      solarDayEl.classList.add("weekday-sunday");
-    } else {
-      solarDayEl.classList.add("weekday-weekday");
+    if (solarDayEl) {
+      solarDayEl.textContent = d;
+      solarDayEl.className = "day-block-number";
+      if (solarHoliday) {
+        solarDayEl.classList.add("solar-holiday");
+      } else if (date.getDay() === 6) {
+        solarDayEl.classList.add("weekday-saturday");
+      } else if (date.getDay() === 0) {
+        solarDayEl.classList.add("weekday-sunday");
+      } else {
+        solarDayEl.classList.add("weekday-weekday");
+      }
     }
-
-    // Đã xóa tháng Dương ở đây
 
     const lunarDayEl = $("selectedLunarDay");
-    lunarDayEl.textContent = lunar[0];
-    lunarDayEl.className = "lunar-number";
-    if (date.getDay() === 6) {
-      lunarDayEl.classList.add("weekday-saturday");
-    } else if (date.getDay() === 0) {
-      lunarDayEl.classList.add("weekday-sunday");
-    } else {
-      lunarDayEl.classList.add("weekday-weekday");
-    }
+    if (lunarDayEl) {
+      lunarDayEl.textContent = lunar[0];
+      lunarDayEl.className = "lunar-number";
+      if (date.getDay() === 6) {
+        lunarDayEl.classList.add("weekday-saturday");
+      } else if (date.getDay() === 0) {
+        lunarDayEl.classList.add("weekday-sunday");
+      } else {
+        lunarDayEl.classList.add("weekday-weekday");
+      }
 
-    const lunarHoliday = lunar[3]
-      ? ""
-      : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
-    if (lunarHoliday) {
-      lunarDayEl.classList.add("lunar-holiday");
+      const lunarHoliday = lunar[3]
+        ? ""
+        : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
+      if (lunarHoliday) {
+        lunarDayEl.classList.add("lunar-holiday");
+      }
     }
 
     const monthName = LUNAR_MONTH_NAMES[lunar[1]] || `Tháng ${lunar[1]}`;
-    $("selectedLunarMonth").textContent =
-      `${monthName.toUpperCase()}${lunar[3] ? " (N)" : ""}`;
-    $("selectedCanChiDay").textContent = canChiDay(d, m, y);
-    $("selectedCanChiMonth").textContent = canChiMonth(lunar[1], lunar[2]);
-    $("selectedCanChiYear").textContent = canChiYear(lunar[2]);
+    const lunarMonthEl = $("selectedLunarMonth");
+    if (lunarMonthEl) {
+      lunarMonthEl.textContent =
+        `${monthName.toUpperCase()}${lunar[3] ? " (N)" : ""}`;
+    }
+    
+    const canChiDayEl = $("selectedCanChiDay");
+    if (canChiDayEl) canChiDayEl.textContent = canChiDay(d, m, y);
+    
+    const canChiMonthEl = $("selectedCanChiMonth");
+    if (canChiMonthEl) canChiMonthEl.textContent = canChiMonth(lunar[1], lunar[2]);
+    
+    const canChiYearEl = $("selectedCanChiYear");
+    if (canChiYearEl) canChiYearEl.textContent = canChiYear(lunar[2]);
 
     const lunarHolidayText = lunar[3]
       ? ""
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
     const lunarAnniversaryText = getLunarAnniversary(lunar);
     const lunarInfoHolidayEl = $("selectedLunarHoliday");
-    const lunarInfoHolidayRow = lunarInfoHolidayEl.closest(".lunar-holiday-row");
+    const lunarInfoHolidayRow = lunarInfoHolidayEl ? lunarInfoHolidayEl.closest(".lunar-holiday-row") : null;
 
-    lunarInfoHolidayEl.classList.remove("anniversary-text");
-    if (lunarAnniversaryText) {
-      // Giỗ âm lịch hiển thị ngay vị trí ngày lễ âm trong block, màu xanh lá.
-      lunarInfoHolidayEl.innerHTML = `🕯️ ${lunarAnniversaryText}`;
-      lunarInfoHolidayEl.classList.add("anniversary-text");
-      if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.add("anniversary-row");
-    } else {
-      lunarInfoHolidayEl.textContent = lunarHolidayText || "—";
-      if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.remove("anniversary-row");
+    if (lunarInfoHolidayEl) {
+      lunarInfoHolidayEl.classList.remove("anniversary-text");
+      if (lunarAnniversaryText) {
+        lunarInfoHolidayEl.innerHTML = `🕯️ ${lunarAnniversaryText}`;
+        lunarInfoHolidayEl.classList.add("anniversary-text");
+        if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.add("anniversary-row");
+      } else {
+        lunarInfoHolidayEl.textContent = lunarHolidayText || "—";
+        if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.remove("anniversary-row");
+      }
     }
 
     renderGioHoangDao(d, m, y);
 
     const holidayEl = $("selectedHoliday");
-    const holidayParts = [
-      holiday ? `<span>🎉 ${holiday}</span>` : "",
-      fixedBirthday ? `<span class="selected-birthday">🎂 ${fixedBirthday}</span>` : ""
-    ].filter(Boolean);
-    if (holidayParts.length) {
-      holidayEl.innerHTML = holidayParts.join("<br>");
-      holidayEl.hidden = false;
-    } else {
-      holidayEl.textContent = "";
-      holidayEl.hidden = true;
+    if (holidayEl) {
+      const holidayParts = [
+        holiday ? `<span>🎉 ${holiday}</span>` : "",
+        fixedBirthday ? `<span class="selected-birthday">🎂 ${fixedBirthday}</span>` : ""
+      ].filter(Boolean);
+      if (holidayParts.length) {
+        holidayEl.innerHTML = holidayParts.join("<br>");
+        holidayEl.hidden = false;
+      } else {
+        holidayEl.textContent = "";
+        holidayEl.hidden = true;
+      }
     }
 
     if (openModal) {
       const modal = $("selectedDayModal");
-      modal.hidden = false;
-      modal.setAttribute("aria-hidden", "false");
-      $("closeSelectedDay").focus();
+      if (modal) {
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        const closeBtn = $("closeSelectedDay");
+        if (closeBtn) closeBtn.focus();
+      }
     }
-  }
-
-  function updateSelectedDateInfo(d, m, y, lunar) {
-    showSelectedDate(d, m, y, lunar, false);
   }
 
   function searchDateClick() {
@@ -2328,7 +2719,7 @@ input:focus-visible {
     const lunar = convertSolar2Lunar(d, m, y);
 
     renderCalendar();
-    showSelectedDate(d, m, y, lunar);
+    showSelectedDate(d, m, y, lunar, false);
 
     $("calendarGrid").closest(".calendar-card").scrollIntoView({
       behavior: "smooth",
@@ -2342,7 +2733,7 @@ input:focus-visible {
     current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
     const lunar = convertSolar2Lunar(vietnamToday.day, vietnamToday.month, vietnamToday.year);
     renderCalendar();
-    showSelectedDate(vietnamToday.day, vietnamToday.month, vietnamToday.year, lunar);
+    showSelectedDate(vietnamToday.day, vietnamToday.month, vietnamToday.year, lunar, false);
   }
 
   function setDefaultConverterValues() {
@@ -2445,16 +2836,32 @@ input:focus-visible {
     $("todayBtn").addEventListener("click", resetToToday);
     $("searchDateBtn").addEventListener("click", searchDateClick);
 
+    // Brain button - hiển thị danh sách ngày lễ
+    $("brainBtn").addEventListener("click", showHolidaysModal);
+
+    // Đóng modal danh sách ngày lễ
+    $("closeHolidaysModal").addEventListener("click", closeHolidaysModal);
+    $("holidaysModalBackdrop").addEventListener("click", closeHolidaysModal);
+    document.addEventListener("keydown", (event) => {
+      const modal = $("holidaysModal");
+      if (event.key === "Escape" && modal && !modal.hidden) {
+        closeHolidaysModal();
+      }
+    });
+
     const closeDayModal = () => {
       const modal = $("selectedDayModal");
-      modal.hidden = true;
-      modal.setAttribute("aria-hidden", "true");
+      if (modal) {
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+      }
     };
 
     $("closeSelectedDay").addEventListener("click", closeDayModal);
     $("dayModalBackdrop").addEventListener("click", closeDayModal);
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && !$("selectedDayModal").hidden) {
+      const modal = $("selectedDayModal");
+      if (event.key === "Escape" && modal && !modal.hidden) {
         closeDayModal();
       }
     });
@@ -2494,7 +2901,6 @@ input:focus-visible {
 
   window.AmLich = { convertSolar2Lunar, convertLunar2Solar, jdFromDate, jdToDate };
 })();
-
 </script>
 </body>
 </html>
