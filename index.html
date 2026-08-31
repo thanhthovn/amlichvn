@@ -1076,6 +1076,21 @@ input:focus-visible {
   color: #c62828 !important;
 }
 
+
+/* Nền tháng Âm trong lịch block */
+#selectedLunarMonth {
+  background: #2e7d32 !important;
+  color: #ffffff !important;
+}
+
+/* ===== Ngày Âm là lễ Âm: đỏ + viền vàng ===== */
+.lunar-number.lunar-holiday {
+  color: #c62828 !important;
+  -webkit-text-stroke: 6px #f6d365 !important;
+  paint-order: stroke fill;
+  text-shadow: 0 5px 12px rgba(0,0,0,.15) !important;
+}
+
 /* ===== Ngày Dương trong lịch block: lễ Dương = đỏ + viền vàng ===== */
 .day-block-number.solar-holiday {
   color: #c62828 !important;
@@ -1209,6 +1224,23 @@ input:focus-visible {
 }
 #selectedSolarDay.weekday-sunday {
   color: #c62828 !important;
+}
+
+
+/* ===== Ô NGÀY LỄ ÂM BÊN PHẢI ===== */
+.lunar-info-side .lunar-holiday-row {
+  background: #c62828 !important;
+  border-color: #a51d1d !important;
+}
+
+.lunar-info-side .lunar-holiday-row strong,
+.lunar-info-side #selectedLunarHoliday {
+  display: block !important;
+  width: 100% !important;
+  background: #c62828 !important;
+  color: #f6d365 !important;
+  font-weight: 900 !important;
+  text-align: center !important;
 }
 
 </style>
@@ -1945,6 +1977,14 @@ input:focus-visible {
       lunarDayEl.classList.add("weekday-sunday");
     } else {
       lunarDayEl.classList.add("weekday-weekday");
+    }
+
+    // Ngày lễ Âm: ưu tiên màu đỏ + viền vàng.
+    const lunarHoliday = lunar[3]
+      ? ""
+      : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
+    if (lunarHoliday) {
+      lunarDayEl.classList.add("lunar-holiday");
     }
 
     $("selectedLunarMonth").textContent =
