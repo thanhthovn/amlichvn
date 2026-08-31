@@ -955,7 +955,6 @@ input:focus-visible {
 }
 
 /* ===== Consolidated responsive rules ===== */
-
 @media (max-width: 700px) {
   .container {
     padding: 18px 10px 35px;
@@ -1390,9 +1389,7 @@ input:focus-visible {
         </table>
       </div>
       <div class="legend">
-        <span><i class="dot solar"></i> Hôm nay</span>
-        <span><i class="dot lunar"></i> Ngày âm</span>
-        <span><i class="dot weekend"></i> Cuối tuần</span>
+        <span><i class="dot solar"></i> </span>
       </div>
 
     </section>
@@ -1426,6 +1423,7 @@ input:focus-visible {
           <div class="day-block-number" id="selectedSolarDay">17</div>
           <div id="selectedHoliday" class="selected-holiday" hidden></div>
           <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span class="weekday-box weekday-english">MONDAY</span></div>
+          <!-- Đã xóa tháng Dương -->
         </div>
 
         <div class="lunar-row">
@@ -1666,6 +1664,11 @@ input:focus-visible {
   }
 
   function convertLunar2Solar(lunarDay, lunarMonth, lunarYear, lunarLeap, timeZone = TIME_ZONE) {
+    // FIXED: Kiểm tra input hợp lệ
+    if (lunarMonth < 1 || lunarMonth > 12 || lunarDay < 1 || lunarDay > 30) {
+      return [0, 0, 0];
+    }
+    
     let a11, b11;
     if (lunarMonth < 11) {
       a11 = getLunarMonth11(lunarYear - 1, timeZone);
@@ -1683,8 +1686,12 @@ input:focus-visible {
       const leapOff = getLeapMonthOffset(a11, timeZone);
       let leapMonth = leapOff - 2;
       if (leapMonth < 0) leapMonth += 12;
-
+      
+      // FIXED: Kiểm tra tháng nhuận chặt chẽ hơn
       if (lunarLeap !== 0 && lunarMonth !== leapMonth) return [0, 0, 0];
+      if (lunarLeap === 0 && off >= leapOff && off < leapOff + 1) {
+        return [0, 0, 0]; // Tháng nhuận nhưng không đánh dấu
+      }
       if (lunarLeap !== 0 || off >= leapOff) off += 1;
     }
 
@@ -1761,10 +1768,12 @@ input:focus-visible {
     "23-12": "Ông Táo về trời"
   };
 
+  // FIXED: Thêm kiểm tra year hợp lệ
   function getNthWeekdayOfMonth(year, month, weekday, nth) {
     if (!Number.isInteger(year) || !Number.isInteger(month) ||
         !Number.isInteger(weekday) || !Number.isInteger(nth) ||
-        month < 1 || month > 12 || weekday < 0 || weekday > 6 || nth < 1) {
+        month < 1 || month > 12 || weekday < 0 || weekday > 6 || nth < 1 ||
+        year < 1 || year > 9999) {
       return null;
     }
     const first = new Date(year, month - 1, 1);
@@ -1814,7 +1823,9 @@ input:focus-visible {
     return `${CAN[mod(jd + 9, 10)]} ${CHI[mod(jd + 1, 12)]}`;
   }
 
+  // FIXED: Kiểm tra lunarMonth hợp lệ
   function canChiMonth(lunarMonth, lunarYear) {
+    if (lunarMonth < 1 || lunarMonth > 12) return "Tháng không hợp lệ";
     const yearCan = (lunarYear + 6) % 10;
     const firstMonthCanMap = [2, 4, 6, 8, 0];
     const firstMonthCan = firstMonthCanMap[yearCan % 5];
@@ -1853,9 +1864,11 @@ input:focus-visible {
     "Hợi": "21h–23h"
   };
 
+  // FIXED: Xử lý dayChi undefined
   function getGioHoangDao(d, m, y) {
     const dayCanChi = canChiDay(d, m, y);
-    const dayChi = dayCanChi.split(" ")[1];
+    const parts = dayCanChi.split(" ");
+    const dayChi = parts.length > 1 ? parts[1] : "Tý";
     const hoangDao = new Set(HOANG_DAO_BY_DAY_CHI[dayChi] || []);
     return CHI.map((chi) => ({
       chi,
@@ -1864,7 +1877,6 @@ input:focus-visible {
     }));
   }
 
-  // ===== UPDATED: renderGioHoangDao with badges =====
   function renderGioHoangDao(d, m, y) {
     const box = $("auspiciousHours");
     const hoangDaoText = $("hoangDaoText");
@@ -1873,7 +1885,6 @@ input:focus-visible {
 
     const hours = getGioHoangDao(d, m, y);
     
-    // Tạo badge cho từng giờ Hoàng Đạo
     const hoangDaoHours = hours
       .filter(hour => hour.isHoangDao)
       .map(hour => `<span class="hour-badge">${hour.chi} (${hour.range})</span>`)
@@ -1893,9 +1904,10 @@ input:focus-visible {
     return `${lunar[0]}/${lunar[1]}${lunar[3] ? " nhuận" : ""}`;
   }
 
+  // FIXED: Kiểm tra year hợp lệ
   function validSolar(d, m, y) {
     if (!Number.isInteger(d) || !Number.isInteger(m) || !Number.isInteger(y)) return false;
-    if (y < 1 || m < 1 || m > 12 || d < 1) return false;
+    if (y < 1800 || y > 2199 || m < 1 || m > 12 || d < 1) return false;
     const maxDay = daysInMonth(y, m);
     if (d > maxDay) return false;
     const dt = new Date(y, m - 1, d);
@@ -2112,6 +2124,8 @@ input:focus-visible {
       solarDayEl.classList.add("weekday-weekday");
     }
 
+    // Đã xóa tháng Dương ở đây
+
     const lunarDayEl = $("selectedLunarDay");
     lunarDayEl.textContent = lunar[0];
     lunarDayEl.className = "lunar-number";
@@ -2142,7 +2156,6 @@ input:focus-visible {
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
     $("selectedLunarHoliday").textContent = lunarHolidayText || "—";
 
-    // Gọi render giờ Hoàng Đạo với badge
     renderGioHoangDao(d, m, y);
 
     const holidayEl = $("selectedHoliday");
