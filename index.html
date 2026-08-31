@@ -1944,6 +1944,8 @@ input:focus-visible {
   let current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
   const todayKey = `${vietnamToday.year}-${vietnamToday.month}-${vietnamToday.day}`;
   let selectedDateKey = null;
+  // Click 2 lần cùng một ngày mới mở block thông tin ngày
+  let lastClickedDateKey = null;
 
   function renderCalendar() {
     const y = current.getFullYear();
@@ -2026,9 +2028,19 @@ input:focus-visible {
         (holiday ? ` • ${holiday}` : "");
 
       const selectDate = () => {
-        selectedDateKey = `${y}-${m}-${d}`;
-        renderCalendar();
-        showSelectedDate(d, m, y, lunar);
+        const newKey = `${y}-${m}-${d}`;
+
+        if (lastClickedDateKey === newKey) {
+          // Click lần 2 vào đúng ngày đang chọn → mở block
+          selectedDateKey = newKey;
+          showSelectedDate(d, m, y, lunar, true);
+        } else {
+          // Click lần 1 → chọn ngày + cập nhật toàn bộ thông tin, nhưng chưa mở block
+          selectedDateKey = newKey;
+          lastClickedDateKey = newKey;
+          renderCalendar();
+          showSelectedDate(d, m, y, lunar, false);
+        }
       };
 
       td.addEventListener("click", selectDate);
@@ -2079,7 +2091,7 @@ input:focus-visible {
       `Tháng ${canChiMonth(displayedMonthLunar[1], displayedMonthLunar[2])} • Năm ${canChiYear(displayedMonthLunar[2])}`;
   }
 
-  function showSelectedDate(d, m, y, lunar) {
+  function showSelectedDate(d, m, y, lunar, openModal = true) {
     selectedDateKey = `${y}-${m}-${d}`;
 
     const date = makeCalendarDate(y, m, d);
@@ -2168,10 +2180,12 @@ input:focus-visible {
       holidayEl.hidden = true;
     }
 
-    const modal = $("selectedDayModal");
-    modal.hidden = false;
-    modal.setAttribute("aria-hidden", "false");
-    $("closeSelectedDay").focus();
+    if (openModal) {
+      const modal = $("selectedDayModal");
+      modal.hidden = false;
+      modal.setAttribute("aria-hidden", "false");
+      $("closeSelectedDay").focus();
+    }
   }
 
   function searchDateClick() {
@@ -2188,6 +2202,7 @@ input:focus-visible {
     }
 
     selectedDateKey = `${y}-${m}-${d}`;
+    lastClickedDateKey = null;
     current = makeCalendarDate(y, m, 1);
     const lunar = convertSolar2Lunar(d, m, y);
 
@@ -2202,6 +2217,7 @@ input:focus-visible {
 
   function resetToToday() {
     selectedDateKey = null;
+    lastClickedDateKey = null;
     current = makeCalendarDate(vietnamToday.year, vietnamToday.month, 1);
     const lunar = convertSolar2Lunar(vietnamToday.day, vietnamToday.month, vietnamToday.year);
     renderCalendar();
