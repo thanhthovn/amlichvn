@@ -481,6 +481,46 @@ footer {
   line-height: 1.2;
   font-weight: 800;
 }
+.calendar-table .birthday {
+  display: block;
+  margin-top: 5px;
+  color: #7b1fa2;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.calendar-table .adjacent-day .birthday {
+  color: rgba(123, 31, 162, .38);
+}
+
+.selected-birthday {
+  display: inline-block;
+  margin-top: 4px;
+  color: #7b1fa2;
+  font-weight: 900;
+}
+
+.calendar-table .anniversary {
+  display: block;
+  margin-top: 5px;
+  color: #2e7d32;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.calendar-table .adjacent-day .anniversary {
+  color: rgba(46, 125, 50, .38);
+}
+
+.selected-anniversary {
+  display: inline-block;
+  margin-top: 4px;
+  color: #2e7d32;
+  font-weight: 800;
+}
+
 .calendar-table td.weekend .solar {
   color: #c62828;
 }
@@ -954,6 +994,13 @@ input:focus-visible {
   }
 }
 
+.anniversary-text { color:#2e7d32 !important; font-weight:800 !important; }
+
+.lunar-anniversary {
+  color: #2e7d32 !important;
+  font-weight: 800 !important;
+}
+
 /* ===== Consolidated responsive rules ===== */
 @media (max-width: 700px) {
   .container {
@@ -1320,6 +1367,18 @@ input:focus-visible {
   text-align: center !important;
 }
 
+
+/* ===== GIỖ / KỶ NIỆM ÂM LỊCH TRONG BLOCK ===== */
+.lunar-info-side .lunar-holiday-row.anniversary-row {
+  background: #eef8ee !important;
+  border-color: #2e7d32 !important;
+}
+
+.lunar-info-side .lunar-holiday-row.anniversary-row #selectedLunarHoliday {
+  background: #eef8ee !important;
+  color: #2e7d32 !important;
+  font-weight: 900 !important;
+}
 </style>
 </head>
 <body>
@@ -1751,6 +1810,11 @@ input:focus-visible {
     "24-12": "Lễ Giáng sinh"
   };
 
+  // Sinh nhật / sự kiện cố định theo DƯƠNG LỊCH
+  const FIXED_BIRTHDAY = {
+    "23-12": "Sinh nhật Hải Long"
+  };
+
   const LUNAR_HOLIDAYS = {
     "1-1": "Tết Nguyên đán",
     "2-1": "Tết Nguyên đán",
@@ -1768,6 +1832,12 @@ input:focus-visible {
     "15-10": "Tết Hạ Nguyên",
     "23-12": "Ông Táo về trời"
   };
+
+  // Ngày giỗ / kỷ niệm Âm lịch — KHÔNG phải ngày Dương lịch
+  const LUNAR_ANNIVERSARY = {
+    "11-8": "Giỗ bà nội"
+  };
+
 
   // FIXED: Thêm kiểm tra year hợp lệ
   function getNthWeekdayOfMonth(year, month, weekday, nth) {
@@ -1797,18 +1867,35 @@ input:focus-visible {
     return holidays;
   }
 
+  function getFixedBirthday(d, m) {
+    return FIXED_BIRTHDAY[`${d}-${m}`] || "";
+  }
+
   function getHoliday(d, m, lunar, solarYear = new Date().getFullYear()) {
     const holidays = [];
     const fixed = FIXED_HOLIDAYS[`${d}-${m}`];
-    const lunarHoliday = lunar[3]
-      ? null
-      : LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`];
+    const lunarKey = `${lunar[0]}-${lunar[1]}`;
+    const lunarHoliday = lunar[3] ? null : LUNAR_HOLIDAYS[lunarKey];
 
     if (fixed) holidays.push(fixed);
     if (lunarHoliday) holidays.push(lunarHoliday);
     holidays.push(...getDynamicHoliday(d, m, solarYear));
 
     return holidays.join(" • ");
+  }
+
+  function getBirthday(d, m) {
+    return FIXED_BIRTHDAY[`${d}-${m}`] || "";
+  }
+
+  function getLunarAnniversary(lunar) {
+    if (!lunar || lunar[3]) return "";
+    return LUNAR_ANNIVERSARY[`${lunar[0]}-${lunar[1]}`] || "";
+  }
+
+  function formatLunarAnniversary(lunar) {
+    const anniversary = getLunarAnniversary(lunar);
+    return anniversary ? `🕯️ ${anniversary}` : "";
   }
 
   function mod(n, m) {
@@ -1973,12 +2060,15 @@ input:focus-visible {
       const d = prevTotal - i;
       const lunar = convertSolar2Lunar(d, prevMonth, prevYear);
       const holiday = getHoliday(d, prevMonth, lunar, prevYear);
+      const birthday = getFixedBirthday(d, prevMonth);
       const td = document.createElement("td");
       td.className = "day adjacent-day";
       td.innerHTML = `
         <span class="solar">${d}</span>
         <span class="lunar">${formatLunar(lunar)}</span>
         ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
+        ${birthday ? `<span class="birthday">🎂 ${birthday}</span>` : ""}
+        ${getLunarAnniversary(lunar) ? `<span class="anniversary">🕯️ ${getLunarAnniversary(lunar)}</span>` : ""}
       `;
       td.title = `${d}/${prevMonth}/${prevYear} (tháng trước)`;
       row.appendChild(td);
@@ -1988,6 +2078,7 @@ input:focus-visible {
     for (let d = 1; d <= total; d++) {
       const lunar = convertSolar2Lunar(d, m, y);
       const holiday = getHoliday(d, m, lunar, y);
+      const birthday = getFixedBirthday(d, m);
 
       if (!firstLunar) firstLunar = lunar;
 
@@ -2020,6 +2111,8 @@ input:focus-visible {
         <span class="solar">${d}</span>
         <span class="lunar">${formatLunar(lunar)}</span>
         ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
+        ${birthday ? `<span class="birthday">🎂 ${birthday}</span>` : ""}
+        ${getLunarAnniversary(lunar) ? `<span class="anniversary">🕯️ ${getLunarAnniversary(lunar)}</span>` : ""}
       `;
 
       td.title =
@@ -2070,12 +2163,15 @@ input:focus-visible {
       while (count < 7) {
         const lunar = convertSolar2Lunar(nextDay, nextMonth, nextYear);
         const holiday = getHoliday(nextDay, nextMonth, lunar, nextYear);
+        const birthday = getFixedBirthday(nextDay, nextMonth);
         const td = document.createElement("td");
         td.className = "day adjacent-day";
         td.innerHTML = `
           <span class="solar">${nextDay}</span>
           <span class="lunar">${formatLunar(lunar)}</span>
           ${holiday ? `<span class="holiday">${holiday}</span>` : ""}
+          ${birthday ? `<span class="birthday">🎂 ${birthday}</span>` : ""}
+          ${getLunarAnniversary(lunar) ? `<span class="anniversary">🕯️ ${getLunarAnniversary(lunar)}</span>` : ""}
         `;
         td.title = `${nextDay}/${nextMonth}/${nextYear} (tháng sau)`;
         row.appendChild(td);
@@ -2107,13 +2203,17 @@ input:focus-visible {
       "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
     const solarHoliday = FIXED_HOLIDAYS[`${d}-${m}`] || "";
+    const fixedBirthday = getFixedBirthday(d, m);
     const dynamicHoliday = getDynamicHoliday(d, m, y).join(" • ");
     const holiday = [solarHoliday, dynamicHoliday].filter(Boolean).join(" • ");
+    const birthday = getBirthday(d, m);
+    const lunarAnniversary = getLunarAnniversary(lunar);
 
     $("todayTitle").textContent = `${pad(d)}-${pad(m)}-${y}`;
     $("todaySummary").textContent =
       `[Mùng ${formatLunar(lunar)} ÂL] Ngày ${canChiDay(d, m, y)} • Tháng ${canChiMonth(lunar[1], lunar[2])} • Năm ${canChiYear(lunar[2])}` +
-      (holiday ? ` • 🎉 ${holiday}` : "");
+      (holiday ? ` • 🎉 ${holiday}` : "") +
+      (fixedBirthday ? ` • 🎂 ${fixedBirthday}` : "");
 
     $("selectedDayTitle").textContent = `${weekdayNames[date.getDay()]} • ${pad(d)}/${pad(m)}/${y}`;
     $("selectedYear").textContent = y;
@@ -2167,13 +2267,30 @@ input:focus-visible {
     const lunarHolidayText = lunar[3]
       ? ""
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
-    $("selectedLunarHoliday").textContent = lunarHolidayText || "—";
+    const lunarAnniversaryText = getLunarAnniversary(lunar);
+    const lunarInfoHolidayEl = $("selectedLunarHoliday");
+    const lunarInfoHolidayRow = lunarInfoHolidayEl.closest(".lunar-holiday-row");
+
+    lunarInfoHolidayEl.classList.remove("anniversary-text");
+    if (lunarAnniversaryText) {
+      // Giỗ âm lịch hiển thị ngay vị trí ngày lễ âm trong block, màu xanh lá.
+      lunarInfoHolidayEl.innerHTML = `🕯️ ${lunarAnniversaryText}`;
+      lunarInfoHolidayEl.classList.add("anniversary-text");
+      if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.add("anniversary-row");
+    } else {
+      lunarInfoHolidayEl.textContent = lunarHolidayText || "—";
+      if (lunarInfoHolidayRow) lunarInfoHolidayRow.classList.remove("anniversary-row");
+    }
 
     renderGioHoangDao(d, m, y);
 
     const holidayEl = $("selectedHoliday");
-    if (holiday) {
-      holidayEl.textContent = `🎉 ${holiday}`;
+    const holidayParts = [
+      holiday ? `<span>🎉 ${holiday}</span>` : "",
+      fixedBirthday ? `<span class="selected-birthday">🎂 ${fixedBirthday}</span>` : ""
+    ].filter(Boolean);
+    if (holidayParts.length) {
+      holidayEl.innerHTML = holidayParts.join("<br>");
       holidayEl.hidden = false;
     } else {
       holidayEl.textContent = "";
@@ -2186,6 +2303,10 @@ input:focus-visible {
       modal.setAttribute("aria-hidden", "false");
       $("closeSelectedDay").focus();
     }
+  }
+
+  function updateSelectedDateInfo(d, m, y, lunar) {
+    showSelectedDate(d, m, y, lunar, false);
   }
 
   function searchDateClick() {
