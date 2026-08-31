@@ -626,9 +626,21 @@ footer {
   font-family: Impact, "Arial Black", sans-serif;
   font-size: clamp(162.5px, 40vw, 237.5px) !important;
   line-height: .9;
-  color: #2e9b55;
+  color: #000000;
   text-shadow: 2px 3px 0 #d8e8d8, 0 5px 12px rgba(0,0,0,.15);
 }
+.selected-holiday {
+  margin: 4px auto -25px;
+  padding: 6px 14px;
+  width: fit-content;
+  max-width: 92%;
+  color: #c62828;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.35;
+  text-align: center;
+}
+
 .day-block-month {
   display: inline-block;
   margin-top: 6px;
@@ -807,24 +819,21 @@ input:focus-visible {
   padding: 9px 11px !important;
   font-size: 15px !important;
 }
-.calendar-card,
-  .converter-card,
-  .info-card {
-  background: #fffdf8 !important;
-  border-color: #d9dfd2;
-  border: 1px solid #dfe4dc !important;
-  box-shadow: 0 10px 28px rgba(55, 72, 55, .08) !important;
+
+.lunar-info-side .lunar-holiday-row {
+  grid-template-columns: 1fr !important;
+  min-height: 42px !important;
 }
-.day-block-main,
-  .lunar-main {
-  background: radial-gradient(circle at center, rgba(255,255,255,.98), rgba(255,248,225,.9)),
-      #fff8e7 !important;
+
+.lunar-info-side .lunar-holiday-row strong {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 9px 8px !important;
+  text-align: center !important;
+  font-size: 13px !important;
+  line-height: 1.25;
 }
-.lunar-info-side .day-row span,
-.lunar-info-side .day-row strong {
-  padding: 8px 9px;
-  font-size: 10px;
-}
+/* Final card/background overrides consolidated above. */
 #selectedSolarMonth {
   display: none !important;
 }
@@ -1054,13 +1063,33 @@ input:focus-visible {
 }
 
 /* FINAL FIX: Vietnamese and English weekday boxes use identical centering */
+
+
+/* ===== Số ngày Âm trong lịch block: màu theo thứ ===== */
+.lunar-number.weekday-weekday {
+  color: #111111 !important;
+}
+.lunar-number.weekday-saturday {
+  color: #2e7d32 !important;
+}
+.lunar-number.weekday-sunday {
+  color: #c62828 !important;
+}
+
+/* ===== Ngày Dương trong lịch block: lễ Dương = đỏ + viền vàng ===== */
+.day-block-number.solar-holiday {
+  color: #c62828 !important;
+  -webkit-text-stroke: 6px #f6d365 !important;
+  paint-order: stroke fill;
+  text-shadow: 0 5px 12px rgba(0,0,0,.15) !important;
+}
+
 #selectedWeekday {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
   text-align: center !important;
-  gap: 90px !important;
   box-sizing: border-box !important;
 
   margin-top: 40px !important;
@@ -1150,6 +1179,7 @@ input:focus-visible {
 }
 
 #selectedWeekday {
+  /* Khoảng cách cố định giữa Thứ tiếng Việt - ☯ - Thứ tiếng Anh */
   gap: 45px !important;
 }
 
@@ -1163,6 +1193,22 @@ input:focus-visible {
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
+}
+
+
+/* Màu số ngày Dương trong lịch block theo thứ */
+.day-block-number.weekday { color: #000 !important; }
+.day-block-number.saturday { color: #2e7d32 !important; }
+.day-block-number.sunday { color: #c62828 !important; }
+/* Màu ngày Dương lớn trong lịch block theo thứ */
+#selectedSolarDay.weekday-weekday {
+  color: #000000 !important;
+}
+#selectedSolarDay.weekday-saturday {
+  color: #2e7d32 !important;
+}
+#selectedSolarDay.weekday-sunday {
+  color: #c62828 !important;
 }
 
 </style>
@@ -1253,6 +1299,7 @@ input:focus-visible {
 
         <div class="day-block-main">
           <div class="day-block-number" id="selectedSolarDay">17</div>
+          <div id="selectedHoliday" class="selected-holiday" hidden></div>
           <div class="day-block-week" id="selectedWeekday">THỨ HAI <span class="weekday-bagua">VVV</span><span class="weekday-box weekday-english">MONDAY</span></div>
           <div class="day-block-month" id="selectedSolarMonth">THÁNG 01</div>
         </div>
@@ -1277,12 +1324,14 @@ input:focus-visible {
               <span>Năm</span>
               <strong id="selectedCanChiYear">Ất Tỵ</strong>
             </div>
+            <div class="day-row lunar-holiday-row">
+              <strong id="selectedLunarHoliday">—</strong>
+            </div>
           </div>
           </div>
         </div>
 
         <div class="day-block-footer">
-          <div id="selectedHoliday" hidden></div>
           <button type="button" id="closeSelectedDay" aria-label="Đóng lịch block">ÂM LỊCH VIỆT NAM</button>
         </div>
       </section>
@@ -1666,12 +1715,8 @@ input:focus-visible {
     return `${lunar[0]}/${lunar[1]}${lunar[3] ? " nhuận" : ""}`;
   }
 
-  function dateFromParts(d, m, y) {
-    return makeCalendarDate(y, m, d);
-  }
-
   function validSolar(d, m, y) {
-    const dt = dateFromParts(d, m, y);
+    const dt = makeCalendarDate(y, m, d);
     return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
   }
 
@@ -1857,7 +1902,9 @@ input:focus-visible {
       "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
       "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
-    const holiday = getHoliday(d, m, lunar, y);
+    const solarHoliday = FIXED_HOLIDAYS[`${d}-${m}`] || "";
+    const dynamicHoliday = getDynamicHoliday(d, m, y).join(" • ");
+    const holiday = [solarHoliday, dynamicHoliday].filter(Boolean).join(" • ");
 
     $("todayTitle").textContent = `${pad(d)}-${pad(m)}-${y}`;
     $("todaySummary").textContent =
@@ -1872,14 +1919,44 @@ input:focus-visible {
       `<span class="weekday-box weekday-vietnamese">${weekdayNames[date.getDay()].toUpperCase()}</span>` +
       `<span class="weekday-yinyang" aria-hidden="true">☯</span>` +
       `<span class="weekday-box weekday-english">${weekdayEnglishNames[date.getDay()]}</span>`;
-    $("selectedSolarDay").textContent = d;
+    const solarDayEl = $("selectedSolarDay");
+    solarDayEl.textContent = d;
+
+    // Màu số Dương theo thứ:
+    // T2–T6 = đen, T7 = xanh lá, CN = đỏ.
+    // Nếu là lễ Dương thì luôn ưu tiên: đỏ + viền vàng.
+    solarDayEl.className = "day-block-number";
+    if (solarHoliday) {
+      solarDayEl.classList.add("solar-holiday");
+    } else if (date.getDay() === 6) {
+      solarDayEl.classList.add("weekday-saturday");
+    } else if (date.getDay() === 0) {
+      solarDayEl.classList.add("weekday-sunday");
+    } else {
+      solarDayEl.classList.add("weekday-weekday");
+    }
     $("selectedSolarMonth").textContent = `THÁNG ${pad(m)}`;
-    $("selectedLunarDay").textContent = lunar[0];
+    const lunarDayEl = $("selectedLunarDay");
+    lunarDayEl.textContent = lunar[0];
+    lunarDayEl.className = "lunar-number";
+    if (date.getDay() === 6) {
+      lunarDayEl.classList.add("weekday-saturday");
+    } else if (date.getDay() === 0) {
+      lunarDayEl.classList.add("weekday-sunday");
+    } else {
+      lunarDayEl.classList.add("weekday-weekday");
+    }
+
     $("selectedLunarMonth").textContent =
       `${LUNAR_MONTH_NAMES[lunar[1]].toUpperCase()}${lunar[3] ? " (N)" : ""}`;
     $("selectedCanChiDay").textContent = canChiDay(d, m, y);
     $("selectedCanChiMonth").textContent = canChiMonth(lunar[1], lunar[2]);
     $("selectedCanChiYear").textContent = canChiYear(lunar[2]);
+
+    const lunarHolidayText = lunar[3]
+      ? ""
+      : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
+    $("selectedLunarHoliday").textContent = lunarHolidayText || "—";
 
     const holidayEl = $("selectedHoliday");
     if (holiday) {
@@ -2086,12 +2163,3 @@ input:focus-visible {
 </script>
 </body>
 </html>
-<style>
-.selected-weekday {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 200px;
-  text-align: center;
-}
-</style>
