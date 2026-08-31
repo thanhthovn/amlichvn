@@ -1319,6 +1319,18 @@ input:focus-visible {
 
     </section>
 
+
+    <section class="auspicious-hours-section" id="auspiciousHours" hidden>
+      <div class="auspicious-hours-row hoang-dao-row">
+        <strong>GIỜ HOÀNG ĐẠO:</strong>
+        <span id="hoangDaoText">—</span>
+      </div>
+      <div class="auspicious-hours-row hac-dao-row">
+        <strong>GIỜ HẮC ĐẠO:</strong>
+        <span id="hacDaoText">—</span>
+      </div>
+    </section>
+
     <div class="day-modal" id="selectedDayModal" hidden aria-hidden="true">
       <div class="day-modal-backdrop" id="dayModalBackdrop"></div>
       <section class="day-block" role="dialog" aria-modal="true" aria-labelledby="selectedDayTitle">
@@ -1732,6 +1744,82 @@ input:focus-visible {
     return `${CAN[mod(jd + 9, 10)]} ${CHI[mod(jd + 1, 12)]}`;
   }
 
+
+  // ===== GIỜ HOÀNG ĐẠO / HẮC ĐẠO =====
+  // Quy tắc 6 giờ Hoàng Đạo theo Chi của ngày.
+  // Mỗi ngày có 6 giờ Hoàng Đạo và 6 giờ Hắc Đạo.
+  const HOANG_DAO_BY_DAY_CHI = {
+    "Tý":   ["Tý", "Dần", "Mão", "Ngọ", "Thân", "Dậu"],
+    "Ngọ":  ["Tý", "Dần", "Mão", "Ngọ", "Thân", "Dậu"],
+
+    "Sửu":  ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
+    "Mùi":  ["Dần", "Mão", "Tỵ", "Thân", "Tuất", "Hợi"],
+
+    "Dần":  ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
+    "Thân": ["Tý", "Sửu", "Thìn", "Tỵ", "Mùi", "Tuất"],
+
+    "Mão":  ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
+    "Dậu":  ["Tý", "Dần", "Mão", "Ngọ", "Mùi", "Dậu"],
+
+    "Thìn": ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+    "Tuất": ["Dần", "Thìn", "Tỵ", "Thân", "Dậu", "Hợi"],
+
+    "Tỵ":   ["Sửu", "Thìn", "Ngọ", "Mùi", "Tuất", "Hợi"],
+    "Hợi":  ["Sửu", "Thìn", "Ngọ", "Mùi", "Tuất", "Hợi"]
+  };
+
+  const HOUR_RANGES = {
+    "Tý": "23h–01h",
+    "Sửu": "01h–03h",
+    "Dần": "03h–05h",
+    "Mão": "05h–07h",
+    "Thìn": "07h–09h",
+    "Tỵ": "09h–11h",
+    "Ngọ": "11h–13h",
+    "Mùi": "13h–15h",
+    "Thân": "15h–17h",
+    "Dậu": "17h–19h",
+    "Tuất": "19h–21h",
+    "Hợi": "21h–23h"
+  };
+
+  function getGioHoangDao(d, m, y) {
+    const dayCanChi = canChiDay(d, m, y);
+    const dayChi = dayCanChi.split(" ")[1];
+    const hoangDao = new Set(HOANG_DAO_BY_DAY_CHI[dayChi] || []);
+
+    return CHI.map((chi) => ({
+      chi,
+      range: HOUR_RANGES[chi],
+      isHoangDao: hoangDao.has(chi)
+    }));
+  }
+
+  function renderGioHoangDao(d, m, y) {
+    const box = $("auspiciousHours");
+    const hoangDaoText = $("hoangDaoText");
+    const hacDaoText = $("hacDaoText");
+    if (!box || !hoangDaoText || !hacDaoText) return;
+
+    const dayCanChi = canChiDay(d, m, y);
+    const dayChi = dayCanChi.split(" ")[1];
+    const hours = getGioHoangDao(d, m, y);
+
+    const hoangDao = hours
+      .filter(hour => hour.isHoangDao)
+      .map(hour => `${hour.chi} (${hour.range})`)
+      .join(", ");
+
+    const hacDao = hours
+      .filter(hour => !hour.isHoangDao)
+      .map(hour => `${hour.chi} (${hour.range})`)
+      .join(", ");
+
+    hoangDaoText.textContent = hoangDao || "—";
+    hacDaoText.textContent = hacDao || "—";
+    box.hidden = false;
+  }
+
   function canChiMonth(lunarMonth, lunarYear) {
     // Can tháng Giêng được xác định theo Can của năm:
     // Giáp/Kỷ -> Bính Dần; Ất/Canh -> Mậu Dần;
@@ -1997,6 +2085,9 @@ input:focus-visible {
       ? ""
       : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
     $("selectedLunarHoliday").textContent = lunarHolidayText || "—";
+
+    // Tính và hiển thị 12 giờ Hoàng Đạo/Hắc Đạo theo Chi của ngày.
+    renderGioHoangDao(d, m, y);
 
     const holidayEl = $("selectedHoliday");
     if (holiday) {
