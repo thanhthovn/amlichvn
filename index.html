@@ -1969,80 +1969,30 @@ input:focus-visible {
     "tháng Sáu", "tháng Bảy", "tháng Tám", "tháng Chín", "tháng Mười",
     "tháng Mười Một", "tháng Chạp"
   ];
-  const FIXED_HOLIDAYS = {
-    "1-1": "Tết Dương lịch (Tết Tây)",
-    "9-1": "Ngày truyền thống HSSV Việt Nam",
-    "3-2": "Ngày thành lập Đảng Cộng Sản Việt Nam",
-    "14-2": "Lễ tình nhân (Valentine Đỏ)",
-    "27-2": "Ngày thầy thuốc Việt Nam",
-    "8-3": "Ngày Quốc tế Phụ nữ",
-    "14-3": "Valentine Trắng",
-    "20-3": "Ngày Quốc tế Hạnh phúc",
-    "26-3": "Ngày thành lập Đoàn TNCS Hồ Chí Minh",
-    "1-4": "Cá tháng Tư",
-    "14-4": "Valentine Đen",
-    "30-4": "Ngày giải phóng miền Nam",
-    "1-5": "Ngày Quốc tế Lao động",
-    "7-5": "Ngày chiến thắng Điện Biên Phủ",
-    "19-5": "Ngày sinh Chủ tịch Hồ Chí Minh",
-    "1-6": "Ngày Quốc tế thiếu nhi",
-    "21-6": "Ngày báo chí Việt Nam",
-    "28-6": "Ngày gia đình Việt Nam",
-    "11-7": "Ngày dân số thế giới",
-    "27-7": "Ngày Thương binh liệt sĩ",
-    "28-7": "Ngày thành lập công đoàn Việt Nam",
-    "19-8": "Ngày kỷ niệm CMT8 thành công",
-    "2-9": "Ngày Quốc Khánh",
-    "10-9": "Ngày thành lập MTTQ Việt Nam",
-    "1-10": "Ngày quốc tế người cao tuổi",
-    "10-10": "Ngày giải phóng Thủ đô",
-    "13-10": "Ngày Doanh nhân Việt Nam",
-    "20-10": "Ngày Phụ nữ Việt Nam",
-    "31-10": "Ngày Halloween",
-    "9-11": "Ngày pháp luật Việt Nam",
-    "19-11": "Ngày Quốc tế Nam giới",
-    "20-11": "Ngày Nhà giáo Việt Nam",
-    "23-11": "Ngày thành lập Hội chữ thập đỏ Việt Nam",
-    "24-11": "Ngày Văn hóa Việt Nam",
-    "1-12": "Ngày thế giới phòng chống AIDS",
-    "19-12": "Ngày toàn quốc kháng chiến",
-    "22-12": "Ngày thành lập QĐND Việt Nam",
-    "24-12": "Lễ Giáng sinh"
+  // Dữ liệu ngày lễ/sinh nhật/giỗ được tách riêng sang file fixed.txt
+  let HOLIDAY_DATA = {
+    FIXED_HOLIDAYS: {},
+    FIXED_BIRTHDAY: {},
+    LUNAR_HOLIDAYS: {},
+    LUNAR_ANNIVERSARY: {}
   };
 
-  const FIXED_BIRTHDAY = {
-    "27-2": "Sinh nhật anh 2",
-    "6-9": "Sinh nhật Thảo",
-    "14-9": "Sinh nhật An Di",
-    "23-12": "Sinh nhật Hải Long"
-  };
-
-  const LUNAR_HOLIDAYS = {
-    "1-1": "Tết Nguyên đán",
-    "2-1": "Tết Nguyên đán",
-    "3-1": "Tết Nguyên đán",
-    "15-1": "Tết Nguyên Tiêu",
-    "3-3": "Tết Hàn Thực",
-    "10-3": "Giỗ tổ Hùng Vương",
-    "15-4": "Lễ Phật Đản",
-    "5-5": "Tết Đoan ngọ",
-    "7-7": "Lễ Thất tịch",
-    "15-7": "Lễ Vu Lan",
-    "15-8": "Tết Trung thu",
-    "9-9": "Tết Trùng cửu",
-    "10-10": "Tết Trùng thập",
-    "15-10": "Tết Hạ Nguyên",
-    "23-12": "Ông Táo về trời"
-  };
-
-  const LUNAR_ANNIVERSARY = {
-    "9-2": "Giỗ bà ngoại vợ",
-    "25-2": "Giỗ ông ngoại",
-    "27-3": "Giỗ ông ngoại vợ",
-    "11-8": "Giỗ bà nội",
-    "16-11": "Giỗ ông nội",
-    "10-12": "Giỗ cha vợ",
-  };
+  async function loadHolidayData() {
+    try {
+      const response = await fetch("fixed.txt", { cache: "no-store" });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      HOLIDAY_DATA = {
+        FIXED_HOLIDAYS: data.FIXED_HOLIDAYS || {},
+        FIXED_BIRTHDAY: data.FIXED_BIRTHDAY || {},
+        LUNAR_HOLIDAYS: data.LUNAR_HOLIDAYS || {},
+        LUNAR_ANNIVERSARY: data.LUNAR_ANNIVERSARY || {}
+      };
+    } catch (error) {
+      console.error("Không thể tải fixed.txt:", error);
+      console.warn("Lịch vẫn chạy nhưng dữ liệu ngày lễ/sinh nhật/giỗ sẽ không được tải.");
+    }
+  }
 
   function getNthWeekdayOfMonth(year, month, weekday, nth) {
     if (!Number.isInteger(year) || !Number.isInteger(month) ||
@@ -2072,14 +2022,14 @@ input:focus-visible {
   }
 
   function getFixedBirthday(d, m) {
-    return FIXED_BIRTHDAY[`${d}-${m}`] || "";
+    return HOLIDAY_DATA.FIXED_BIRTHDAY[`${d}-${m}`] || "";
   }
 
   function getHoliday(d, m, lunar, solarYear = new Date().getFullYear()) {
     const holidays = [];
-    const fixed = FIXED_HOLIDAYS[`${d}-${m}`];
+    const fixed = HOLIDAY_DATA.FIXED_HOLIDAYS[`${d}-${m}`];
     const lunarKey = `${lunar[0]}-${lunar[1]}`;
-    const lunarHoliday = lunar[3] ? null : LUNAR_HOLIDAYS[lunarKey];
+    const lunarHoliday = lunar[3] ? null : HOLIDAY_DATA.LUNAR_HOLIDAYS[lunarKey];
 
     if (fixed) holidays.push(fixed);
     if (lunarHoliday) holidays.push(lunarHoliday);
@@ -2089,12 +2039,12 @@ input:focus-visible {
   }
 
   function getBirthday(d, m) {
-    return FIXED_BIRTHDAY[`${d}-${m}`] || "";
+    return HOLIDAY_DATA.FIXED_BIRTHDAY[`${d}-${m}`] || "";
   }
 
   function getLunarAnniversary(lunar) {
     if (!lunar || lunar[3]) return "";
-    return LUNAR_ANNIVERSARY[`${lunar[0]}-${lunar[1]}`] || "";
+    return HOLIDAY_DATA.LUNAR_ANNIVERSARY[`${lunar[0]}-${lunar[1]}`] || "";
   }
 
   function formatLunarAnniversary(lunar) {
@@ -2235,11 +2185,11 @@ input:focus-visible {
     const seen = new Set();
 
     // Dương lịch
-    for (const [key, name] of Object.entries(FIXED_HOLIDAYS)) {
+    for (const [key, name] of Object.entries(HOLIDAY_DATA.FIXED_HOLIDAYS)) {
       const [d, m] = key.split("-").map(Number);
       const lunar = convertSolar2Lunar(d, m, year);
       const lunarKey = `${lunar[0]}-${lunar[1]}`;
-      const isLunarHoliday = LUNAR_HOLIDAYS[lunarKey] || "";
+      const isLunarHoliday = HOLIDAY_DATA.LUNAR_HOLIDAYS[lunarKey] || "";
       const uniqueKey = `solar-${key}`;
       if (!seen.has(uniqueKey)) {
         seen.add(uniqueKey);
@@ -2254,7 +2204,7 @@ input:focus-visible {
     }
 
     // Sinh nhật Dương lịch
-    for (const [key, name] of Object.entries(FIXED_BIRTHDAY)) {
+    for (const [key, name] of Object.entries(HOLIDAY_DATA.FIXED_BIRTHDAY)) {
       const [d, m] = key.split("-").map(Number);
       const uniqueKey = `birthday-${key}`;
       if (!seen.has(uniqueKey)) {
@@ -2270,7 +2220,7 @@ input:focus-visible {
     }
 
     // Âm lịch - Ngày lễ
-    for (const [key, name] of Object.entries(LUNAR_HOLIDAYS)) {
+    for (const [key, name] of Object.entries(HOLIDAY_DATA.LUNAR_HOLIDAYS)) {
       const [d, m] = key.split("-").map(Number);
       const uniqueKey = `lunar-holiday-${key}`;
       if (!seen.has(uniqueKey)) {
@@ -2289,7 +2239,7 @@ input:focus-visible {
     }
 
     // Âm lịch - Giỗ kỷ niệm
-    for (const [key, name] of Object.entries(LUNAR_ANNIVERSARY)) {
+    for (const [key, name] of Object.entries(HOLIDAY_DATA.LUNAR_ANNIVERSARY)) {
       const [d, m] = key.split("-").map(Number);
       const uniqueKey = `anniversary-${key}`;
       if (!seen.has(uniqueKey)) {
@@ -2568,7 +2518,7 @@ input:focus-visible {
       "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
       "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
-    const solarHoliday = FIXED_HOLIDAYS[`${d}-${m}`] || "";
+    const solarHoliday = HOLIDAY_DATA.FIXED_HOLIDAYS[`${d}-${m}`] || "";
     const fixedBirthday = getFixedBirthday(d, m);
     const dynamicHoliday = getDynamicHoliday(d, m, y).join(" • ");
     const holiday = [solarHoliday, dynamicHoliday].filter(Boolean).join(" • ");
@@ -2632,7 +2582,7 @@ input:focus-visible {
 
       const lunarHoliday = lunar[3]
         ? ""
-        : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
+        : (HOLIDAY_DATA.LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
       if (lunarHoliday) {
         lunarDayEl.classList.add("lunar-holiday");
       }
@@ -2656,7 +2606,7 @@ input:focus-visible {
 
     const lunarHolidayText = lunar[3]
       ? ""
-      : (LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
+      : (HOLIDAY_DATA.LUNAR_HOLIDAYS[`${lunar[0]}-${lunar[1]}`] || "");
     const lunarAnniversaryText = getLunarAnniversary(lunar);
     const lunarInfoHolidayEl = $("selectedLunarHoliday");
     const lunarInfoHolidayRow = lunarInfoHolidayEl ? lunarInfoHolidayEl.closest(".lunar-holiday-row") : null;
@@ -2813,7 +2763,7 @@ input:focus-visible {
       `<strong>${pad(solar[0])}/${pad(solar[1])}/${solar[2]}</strong> Dương lịch.`;
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     $("prevYear").addEventListener("click", () => {
       current = makeCalendarDate(current.getFullYear() - 1, current.getMonth() + 1, 1);
       renderCalendar();
@@ -2895,6 +2845,7 @@ input:focus-visible {
       });
     });
 
+    await loadHolidayData();
     setDefaultConverterValues();
     $("footerYear").textContent = vietnamToday.year;
     resetToToday();
