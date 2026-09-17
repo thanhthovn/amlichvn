@@ -66,6 +66,7 @@
     "9-2": "Giỗ bà ngoại vợ",
     "25-2": "Giỗ ông ngoại",
     "27-3": "Giỗ ông ngoại vợ",
+		"6-8": "Giỗ anh Lượng"
     "11-8": "Giỗ bà nội",
     "16-11": "Giỗ ông nội",
     "10-12": "Giỗ cha vợ"
