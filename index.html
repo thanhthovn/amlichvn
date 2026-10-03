@@ -882,7 +882,7 @@ input:focus-visible {
   padding: 9px 8px !important;
   text-align: center !important;
   font-size: 13px !important;
-  line-height: 1.25;
+  line-height: 1.25 !important;
 }
 
 /* ===== GIỜ HOÀNG ĐẠO / HẮC ĐẠO ===== */
@@ -1611,7 +1611,7 @@ input:focus-visible {
         </label>
         <div class="date-search-actions">
           <button type="button" class="date-search-btn today-inline-btn" id="searchDateBtn">Tìm ngày</button>
-          <button type="button" class="brain-btn" id="brainBtn" title="Xem tất cả ngày lễ trong năm">🧠</button>
+          <button type="button" class="brain-btn" id="brainBtn" title="Xem tất cả ngày lễ trong năm" aria-label="Xem danh sách ngày lễ">🧠</button>
           <button type="button" class="today-btn today-inline-btn" id="todayBtn">HÔM NAY</button>
         </div>
       </div>
@@ -1770,6 +1770,12 @@ input:focus-visible {
   <footer>
     <p>© <span id="footerYear">2026</span> Thánh Thơ • amlich of HoNgocDuc • Version 4.6</p>
   </footer>
+
+  <!-- ============================================================
+       DỮ LIỆU NGÀY LỄ — PHẢI LOAD TRƯỚC SCRIPT CHÍNH
+       fixed.js cần định nghĩa: window.HOLIDAY_DATA = { ... }
+       ============================================================ -->
+  <script src="fixed.js"></script>
 
   <script>
 /* Âm Lịch Việt Nam - browser version */
@@ -1948,9 +1954,7 @@ input:focus-visible {
       if (leapMonth < 0) leapMonth += 12;
       
       if (lunarLeap !== 0 && lunarMonth !== leapMonth) return [0, 0, 0];
-      if (lunarLeap === 0 && off >= leapOff && off < leapOff + 1) {
-        return [0, 0, 0];
-      }
+      if (lunarLeap === 0 && off === leapOff) return [0, 0, 0];
       if (lunarLeap !== 0 || off >= leapOff) off += 1;
     }
 
@@ -1969,28 +1973,31 @@ input:focus-visible {
     "tháng Sáu", "tháng Bảy", "tháng Tám", "tháng Chín", "tháng Mười",
     "tháng Mười Một", "tháng Chạp"
   ];
-  // Dữ liệu ngày lễ/sinh nhật/giỗ được tách riêng sang file fixed.txt
-  let HOLIDAY_DATA = {
+
+  // ============================================================
+  // DỮ LIỆU NGÀY LỄ — ĐỌC TỪ fixed.js (window.HOLIDAY_DATA)
+  // ============================================================
+  const DEFAULT_HOLIDAY_DATA = {
     FIXED_HOLIDAYS: {},
     FIXED_BIRTHDAY: {},
     LUNAR_HOLIDAYS: {},
     LUNAR_ANNIVERSARY: {}
   };
 
-  async function loadHolidayData() {
-    try {
-      const response = await fetch("fixed.txt", { cache: "no-store" });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
+  let HOLIDAY_DATA = DEFAULT_HOLIDAY_DATA;
+
+  function loadHolidayData() {
+    if (window.HOLIDAY_DATA && typeof window.HOLIDAY_DATA === "object") {
       HOLIDAY_DATA = {
-        FIXED_HOLIDAYS: data.FIXED_HOLIDAYS || {},
-        FIXED_BIRTHDAY: data.FIXED_BIRTHDAY || {},
-        LUNAR_HOLIDAYS: data.LUNAR_HOLIDAYS || {},
-        LUNAR_ANNIVERSARY: data.LUNAR_ANNIVERSARY || {}
+        FIXED_HOLIDAYS: window.HOLIDAY_DATA.FIXED_HOLIDAYS || {},
+        FIXED_BIRTHDAY: window.HOLIDAY_DATA.FIXED_BIRTHDAY || {},
+        LUNAR_HOLIDAYS: window.HOLIDAY_DATA.LUNAR_HOLIDAYS || {},
+        LUNAR_ANNIVERSARY: window.HOLIDAY_DATA.LUNAR_ANNIVERSARY || {}
       };
-    } catch (error) {
-      console.error("Không thể tải fixed.txt:", error);
-      console.warn("Lịch vẫn chạy nhưng dữ liệu ngày lễ/sinh nhật/giỗ sẽ không được tải.");
+      console.log("✅ Đã load dữ liệu ngày lễ từ fixed.js");
+    } else {
+      console.warn("⚠️ fixed.js chưa load hoặc lỗi cú pháp. Dùng dữ liệu rỗng.");
+      HOLIDAY_DATA = DEFAULT_HOLIDAY_DATA;
     }
   }
 
@@ -2225,7 +2232,6 @@ input:focus-visible {
       const uniqueKey = `lunar-holiday-${key}`;
       if (!seen.has(uniqueKey)) {
         seen.add(uniqueKey);
-        // Tìm ngày Dương tương ứng
         const solar = convertLunar2Solar(d, m, year, 0);
         const solarDate = solar[0] > 0 ? `${pad(solar[0])}/${pad(solar[1])}` : "";
         holidays.push({
@@ -2256,7 +2262,6 @@ input:focus-visible {
       }
     }
 
-    // Sắp xếp theo tháng/ngày
     holidays.sort((a, b) => {
       const aParts = a.date.split("/").map(Number);
       const bParts = b.date.split("/").map(Number);
@@ -2763,24 +2768,35 @@ input:focus-visible {
       `<strong>${pad(solar[0])}/${pad(solar[1])}/${solar[2]}</strong> Dương lịch.`;
   }
 
-  document.addEventListener("DOMContentLoaded", async () => {
+  document.addEventListener("DOMContentLoaded", () => {
+    // ===== Nút điều hướng năm / tháng (có chặn biên 1800–2199) =====
     $("prevYear").addEventListener("click", () => {
-      current = makeCalendarDate(current.getFullYear() - 1, current.getMonth() + 1, 1);
+      const y = current.getFullYear();
+      if (y <= 1800) return;
+      current = makeCalendarDate(y - 1, current.getMonth() + 1, 1);
       renderCalendar();
     });
 
     $("prevMonth").addEventListener("click", () => {
-      current = makeCalendarDate(current.getFullYear(), current.getMonth(), 1);
+      const y = current.getFullYear();
+      const m = current.getMonth() + 1;
+      if (y === 1800 && m === 1) return;
+      current = makeCalendarDate(y, m - 1, 1);
       renderCalendar();
     });
 
     $("nextMonth").addEventListener("click", () => {
-      current = makeCalendarDate(current.getFullYear(), current.getMonth() + 2, 1);
+      const y = current.getFullYear();
+      const m = current.getMonth() + 1;
+      if (y === 2199 && m === 12) return;
+      current = makeCalendarDate(y, m + 1, 1);
       renderCalendar();
     });
 
     $("nextYear").addEventListener("click", () => {
-      current = makeCalendarDate(current.getFullYear() + 1, current.getMonth() + 1, 1);
+      const y = current.getFullYear();
+      if (y >= 2199) return;
+      current = makeCalendarDate(y + 1, current.getMonth() + 1, 1);
       renderCalendar();
     });
 
@@ -2845,7 +2861,8 @@ input:focus-visible {
       });
     });
 
-    await loadHolidayData();
+    // Load dữ liệu ngày lễ từ fixed.js (đã nhúng qua thẻ <script src="fixed.js">)
+    loadHolidayData();
     setDefaultConverterValues();
     $("footerYear").textContent = vietnamToday.year;
     resetToToday();
